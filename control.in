@@ -1,0 +1,9 @@
+Package: default-@MACHINE@
+Priority: optional
+Version: @VERSION@
+Section: middleware
+Architecture: @ARCH@
+Maintainer: Sehwan <sehwan@samsung.com>
+Source: middleware/ui-plugins/ise/
+Depends:
+Description: Default ISE

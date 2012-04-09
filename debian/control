@@ -1,0 +1,20 @@
+Source: ise-default
+Section: libs
+Priority: optional
+Maintainer: Ashish Malhotra <a.malhotra@samsung.com>
+Uploaders: Ji-hoon Lee <dalton.lee@samsung.com>, Jihoon Kim <jihoon48@samsung.com>, Ashish Malhotra <a.malhotra>, Janani K <janani.k@samsung.com>, Sungmin Kwak <sungmin.kwak@samsung.com>
+Build-Depends: debhelper (>= 5), autotools-dev, libelm-dev, libslp-utilx-dev, libisf-dev, libslp-setting-dev, libheynoti-dev, libdevman-haptic-dev, libaul-1-dev, libui-gadget-dev
+Standards-Version: 3.7.2
+Homepage: N/A
+
+Package: ise-default
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Tizen keyboard
+
+Package: ise-default-dbg
+Section: debug
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Tizen keyboard (unstripped)

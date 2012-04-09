@@ -1,0 +1,4 @@
+src/efl_ise_setup.cpp
+src/languagesetting.cpp
+src/include/languagesetting.h
+src/include/isedata.h

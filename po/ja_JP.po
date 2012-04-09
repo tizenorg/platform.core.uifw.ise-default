@@ -1,0 +1,45 @@
+msgid "IDS_IME_OPT_LANG_DUTCH"
+msgstr "Nederlands"
+
+msgid "IDS_IME_OPT_LANG_ENGLISH"
+msgstr "English"
+
+msgid "IDS_IME_OPT_LANG_FRENCH"
+msgstr "Français"
+
+msgid "IDS_IME_OPT_LANG_GERMAN"
+msgstr "Deutsch"
+
+msgid "IDS_IME_OPT_LANG_GREEK"
+msgstr "Ελληνικά"
+
+msgid "IDS_IME_OPT_LANG_RUSSIAN"
+msgstr "Русский"
+
+msgid "IDS_IME_OPT_LANG_SPANISH"
+msgstr "Español"
+
+msgid "IDS_IME_OPT_LANG_TURKISH"
+msgstr "Türkçe"
+
+msgid "IDS_IME_POP_LANG_ITALIAN"
+msgstr "Italiano"
+
+msgid "IDS_IME_POP_LANG_PORTUGUESE"
+msgstr "Português"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "キーボード設定では、少なくとも1言語を選択する必要があります。"
+
+msgid "IDS_IME_BODY_HARDWARE_KEYBOARD"
+msgstr "ハードウェアキーボード"
+
+msgid "IDS_IME_BODY_KEYBOARD_LANGUAGES"
+msgstr "キーボード言語"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "キーボード​設定"
+
+msgid "IDS_IME_BODY_SOFTWARE_KEYBOARD"
+msgstr "ソフトウェアキーボード"
+
