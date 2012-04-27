@@ -1533,13 +1533,13 @@ CMCFController::mouse_release(mcfwindow window, mcfint x, mcfint y, mcftouchdevi
                 if(grab_event) {
                     /* If the layout's addGrab* values are defined, process this event only if the event occured inside grab area */
                     mcfboolean in_grab_area = TRUE;
-                    if((layout->addGrabLeft != NOT_USED && x < -(layout->addGrabLeft)) ||
+/*                    if((layout->addGrabLeft != NOT_USED && x < -(layout->addGrabLeft)) ||
                        (layout->addGrabRight != NOT_USED && x > (pressedCtx->width + layout->addGrabRight)) ||
                        (layout->addGrabTop != NOT_USED && y < -(layout->addGrabTop)) ||
                        (layout->addGrabBottom != NOT_USED && y > (pressedCtx->height + layout->addGrabBottom))) {
                         in_grab_area = FALSE;
                     }
-
+*/
                     if(in_grab_area) {
                         McfLayoutKeyCoordination *coord = cache->get_cur_layout_key_coordination(pressedWindow, pressedKey);
                         if(coord) {

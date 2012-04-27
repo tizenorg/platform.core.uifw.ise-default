@@ -107,6 +107,7 @@ CMCFWindowsImplEfl::create_context_popup_window(const mcfwindow parentWnd)
     elm_win_alpha_set(mcf_context_window, EINA_TRUE);
     ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
     ecore_x_icccm_name_class_set(elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), "ISF Context Popup", "ISF");
+    set_window_accepts_focus( mcf_context_window, FALSE);
     utilx_set_window_effect_state((Display*)dpy, elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), 0);
     CMCFContext *context = CMCFContext::get_instance();
     evas_object_resize(mcf_context_window, w, h);

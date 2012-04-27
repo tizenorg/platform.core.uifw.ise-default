@@ -113,6 +113,7 @@ Virtual_Keyboard_State g_virt_keybd_state = KEYPAD_STATE_UNKNOWN;
 static int create_main_window();
 
 int g_currentLanguage = 0;
+int g_cursor_position = 0;
 
 extern bool IseLangDataSelectState[MAX_LANG_NUM];
 
@@ -482,26 +483,7 @@ void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType ke
 		break;
 	case UD_MVK_ABC:
 		send_flush();
-		if (IseDefaultValue[gIseLayout].resetOnModeChange) {
-			if (gFKeypadMode) {
-				if (mcf_check_arrindex(gInitialInputMode, MAX_INPUT_MODE)) {
-					if (IseDefaultInputModes[gInitialInputMode][0] != NOT_USED) {
-						mode = IseDefaultInputModes[gInitialInputMode][0];
-					}
-				}
-			} else {
-				if (mcf_check_arrindex(gInitialInputMode, MAX_INPUT_MODE)) {
-					if (IseDefaultInputModes[gInitialInputMode][1] != NOT_USED) {
-						mode = IseDefaultInputModes[gInitialInputMode][1];
-					}
-				}
-			}
-		}
-
-		if (mode == NOT_USED) {
-			mode = mcfInputModeByLanguage[KEYPAD_QWERTY][g_currentLanguage];
-		}
-
+		mode = mcfInputModeByLanguage[KEYPAD_QWERTY][g_currentLanguage];
 		gCore->set_input_mode(mode);
 		break;
 	case UD_MVK_NEXTSYM:{
@@ -572,6 +554,8 @@ void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType ke
 		gCore->get_window_size(&width, &height);
 		decorator.finish_show_animation(width, height);
 	}
+
+	ise_update_cursor_position(g_cursor_position);
 
 	for (int loop = 0; loop < MAX_KEY; loop++) {
 		if (gDisableKeyBuffer[loop] != NOT_USED) {
@@ -871,72 +855,96 @@ void ise_show(int ic)
 	if (ic != gPrevInputContext || gFLayoutChanged || !gFInputContextSet
 		|| (g_currentLanguage != gExplicitLanguageSetting
 		&& gExplicitLanguageSetting != NOT_USED)) {
-			gExternalShiftLockMode = FALSE;
 			set_single_commit(IseDefaultValue[gIseLayout].SingleCommit);
 			change_inputmode(IseDefaultValue[gIseLayout].InputMode);
+
+		if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
+			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
+		} else if (gIseLayout ==  ISE_LAYOUT_STYLE_URL) {
+			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
+		} else if (gIseLayout ==  ISE_LAYOUT_STYLE_EMAIL) {
+			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
+		} else {
+			mcfInputMode = IseDefaultValue[gIseLayout].mcfInputMode;
+		}
+
+		if (gFKeypadMode) {
+				newInputMode = IseDefaultInputModes[mcfInputMode][0];
+		} else {
+				newInputMode = IseDefaultInputModes[mcfInputMode][1];
+		}
+		if (newInputMode != NOT_USED) {
+			mcfInputMode = newInputMode;
+		}
+		if (mcfInputMode >= 0 && mcfInputMode < MAX_INPUT_MODE) {
+			g_currentLanguage = langID;
+			IseLangDataSelectState[g_currentLanguage] = true;
+			change_ldb_option(internalLangToLang[langID]);
+			change_keypad((uint32)IseKeypadMode[mcfInputMode][1]);
+
+			if (ic != gPrevInputContext) {
+				change_completion_option(IseInitialCompletionMode[mcfInputMode][get_Ise_default_context().OnOff]);
+			}
+
+			gCore->set_input_mode(mcfInputMode, TRUE);
+
+			mcf8 subLayoutID = IseDefaultValue[gIseLayout].subLayoutID;
+			if(gCore->get_cur_sublayout_id() != subLayoutID)
+			{
+				gCore->set_cur_sublayout_id(subLayoutID);
+				bShouldUpdate = TRUE;
+			}
+
+			if (ic != gPrevInputContext) {
+				gInitialInputMode = mcfInputMode;
+			}
+
+			language = mcfLanguageByInputMode[mcfInputMode];
+		}
+
+		if (get_Ise_default_context().Language != language
+			&& language != NOT_USED) {
+				change_ldb_option(language);
+		}
+
+		if (TRUE &&
+#ifdef SUPPORTS_LAYOUT_STYLE_MONTH
+			gCore->get_input_mode() != INPUT_MODE_4X4_MONTH &&
+#endif
+#ifdef SUPPORTS_LAYOUT_STYLE_NUMBERONLY
+			gCore->get_input_mode() != INPUT_MODE_4X4_NUMONLY &&
+#endif
+#ifdef SUPPORTS_LAYOUT_STYLE_IP
+			gCore->get_input_mode() != INPUT_MODE_4X4_IPv6_123 &&
+#endif
+			TRUE) {
+				_set_prediction_private_key();
+		}
+
+		if(gExternalShiftLockMode) {
+			change_shiftmode(SHIFTMODE_LOCK);
+			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
+					ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
+			if (gCore->get_shift_state() != MCF_SHIFT_STATE_LOCK) {
+				gCore->set_shift_state(MCF_SHIFT_STATE_LOCK);
+				bShouldUpdate = TRUE;
+			}
+		} else {
 			change_shiftmode(IseDefaultValue[gIseLayout].ShiftMode);
 			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-						(IseDefaultValue[gIseLayout].ShiftMode == SHIFTMODE_OFF)
-						? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
+					(IseDefaultValue[gIseLayout].ShiftMode == SHIFTMODE_OFF)
+					? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
 			if (IseDefaultValue[gIseLayout].ShiftMode != gCore->get_shift_state()) {
 				gCore->set_shift_state((MCFShiftState)IseDefaultValue[gIseLayout].ShiftMode);
 				bShouldUpdate = TRUE;
 			}
-
-			if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
-				mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-			} else {
-				mcfInputMode = IseDefaultValue[gIseLayout].mcfInputMode;
-			}
-
-			if (gFKeypadMode) {
-					newInputMode = IseDefaultInputModes[mcfInputMode][0];
-			} else {
-					newInputMode = IseDefaultInputModes[mcfInputMode][1];
-			}
-			if (newInputMode != NOT_USED) {
-				mcfInputMode = newInputMode;
-			}
-			if (mcfInputMode >= 0 && mcfInputMode < MAX_INPUT_MODE) {
-				g_currentLanguage = langID;
-				IseLangDataSelectState[g_currentLanguage] = true;
-				change_ldb_option(internalLangToLang[langID]);
-				change_keypad((uint32)IseKeypadMode[mcfInputMode][1]);
-
-				if (ic != gPrevInputContext) {
-					change_completion_option(IseInitialCompletionMode[mcfInputMode][get_Ise_default_context().OnOff]);
-				}
-
-				gCore->set_input_mode(mcfInputMode, TRUE);
-
-				if (ic != gPrevInputContext) {
-					gInitialInputMode = mcfInputMode;
-				}
-
-				language = mcfLanguageByInputMode[mcfInputMode];
-			}
-
-			if (get_Ise_default_context().Language != language
-				&& language != NOT_USED) {
-					change_ldb_option(language);
-			}
-
-			if (TRUE &&
-#ifdef SUPPORTS_LAYOUT_STYLE_MONTH
-				gCore->get_input_mode() != INPUT_MODE_4X4_MONTH &&
-#endif
-#ifdef SUPPORTS_LAYOUT_STYLE_NUMBERONLY
-				gCore->get_input_mode() != INPUT_MODE_4X4_NUMONLY &&
-#endif
-#ifdef SUPPORTS_LAYOUT_STYLE_IP
-				gCore->get_input_mode() != INPUT_MODE_4X4_IPv6_123 &&
-#endif
-				TRUE) {
-					_set_prediction_private_key();
-			}
 		}
+	}
 
 	gCore->show();
+	gCore->disable_input_events(FALSE);
+
+	ise_update_cursor_position(g_cursor_position);
 
 	for (int loop = 0; loop < MAX_KEY; loop++) {
 		if (gDisableKeyBuffer[loop] != NOT_USED) {
@@ -1022,8 +1030,10 @@ static void ise_set_screen_position()
 void ise_hide(bool fCallHided)
 {
 
-	if (gCore)
+	if (gCore) {
 		gCore->hide();
+		gCore->disable_input_events(TRUE);
+	}
 
 	helper_agent.candidate_hide();
 	send_flush();
@@ -1078,16 +1088,9 @@ void ise_set_language(unsigned int language)
 			gInitialInputMode = gCore->get_input_mode();
 		}
 
-#ifdef SUPPORTS_MULTIPLE_LANGUAGE_SELECTION
-		vconf_set_str(VCONFKEY_ISF_INPUT_LANG_STR, scim::scim_get_language_name_english(IseLangData
-																					[1]
-																					[language].
-																					name).c_str());
-#else
 		/* Save current language setting so that this
 		 * language will be displayed next time ISE_SHOW is called */
 		gExplicitLanguageSetting = language;
-#endif
 
 		g_currentLanguage = language;
 		_setup_info.current_language = g_currentLanguage;
@@ -1177,10 +1180,6 @@ void ise_set_lang_to_vconf(unsigned int language)
 {
 	if (mcf_check_arrindex(language, MAX_LANG_NUM)) {
 		change_ldb_option(internalLangToLang[language]);
-		vconf_set_str(VCONFKEY_ISF_INPUT_LANG_STR, scim::scim_get_language_name_english(IseLangData
-																					[1]
-																					[language].
-																					name).c_str());
 		g_currentLanguage = language;
 		IseLangDataSelectState[g_currentLanguage] = true;
 
@@ -1252,7 +1251,7 @@ void ise_set_caps_mode(unsigned int mode)
 	}
 }
 
-void ise_explictly_set_language(unsigned int language)
+void ise_explicitly_set_language(unsigned int language)
 {
 	if (language == ECORE_IMF_INPUT_PANEL_LANG_ALPHABET) {
 		/* Force to show PRIMARY_LANGUAGE_INDEX mode*/
@@ -1427,6 +1426,23 @@ void ise_set_disable_key(int keyIdx, int disabled)
 	}
 
 	gFPrivateKeySet = TRUE;
+}
+
+void ise_update_cursor_position(int position)
+{
+	if (gCore == NULL)
+		ise_new();
+	mcf_assert_return(gCore);
+
+	g_cursor_position = position;
+
+	if (gCore) {
+		if(position > 0) {
+			ise_set_private_key(CUSTOMID_WWWCOM, WWWCOM_BUTTON_COM_STR, NULL, 0, WWWCOM_BUTTON_COM_STR);
+		} else {
+			ise_set_private_key(CUSTOMID_WWWCOM, WWWCOM_BUTTON_WWW_STR, NULL, 0, WWWCOM_BUTTON_WWW_STR);
+		}
+	}
 }
 
 void ise_set_return_key_type(unsigned int type)

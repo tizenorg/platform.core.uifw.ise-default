@@ -1,7 +1,7 @@
 Name:       ise-default
 Summary:    Tizen keyboard
 Version:    0.2.2
-Release:    61
+Release:    68
 Group:      TO_BE/FILLED_IN
 License:    Samsung Proprietary License
 Source0:    %{name}-%{version}.tar.gz

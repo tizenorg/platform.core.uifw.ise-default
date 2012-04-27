@@ -134,7 +134,7 @@ void ise_set_lang_to_vconf(unsigned int language);
 void ise_focus_in();
 void ise_new();
 void ise_set_mode(unsigned int mode);
-void ise_explictly_set_language(unsigned int language);
+void ise_explicitly_set_language(unsigned int language);
 void ise_reset_context();
 void ise_reset_input_context();
 void ise_focus_out();

@@ -299,13 +299,15 @@ static void slot_ise_show(const HelperAgent *, int ic, char *buf, size_t &len)
 
 		ise_reset_context();	/* reset ISE*/
 
-		ise_explictly_set_language(iseContext.language);
+		ise_explicitly_set_language(iseContext.language);
 
 		ise_set_layout(iseContext.layout);
 
 		ise_set_return_key_type(iseContext.return_key_type);
 
 		ise_set_return_key_disable(iseContext.return_key_disabled);
+
+		ise_set_caps_mode(iseContext.caps_mode);
 
 	} else {
 		DBG("\n-=-=-=-=-=-=-= WARNING WARNING WARNING  - slot_ise_show :\
@@ -346,7 +348,7 @@ static void slot_set_caps_mode(const HelperAgent *, uint32 &mode)
 
 static void slot_set_language(const HelperAgent *, uint32 &language)
 {
-	ise_explictly_set_language(language);
+	ise_explicitly_set_language(language);
 }
 
 static void slot_set_layout(const HelperAgent *, uint32 &layout)
@@ -357,6 +359,11 @@ static void slot_set_layout(const HelperAgent *, uint32 &layout)
 static void slot_get_layout(const HelperAgent *, uint32 &layout)
 {
 	layout = ise_get_layout();
+}
+
+static void slot_update_cursor_position(const HelperAgent *, int ic, const String &uuid, int position)
+{
+	ise_update_cursor_position(position);
 }
 
 static void slot_get_language_locale(const HelperAgent *, int ic, char **locale)
@@ -563,25 +570,6 @@ static void get_screen_size(int &width, int &height)
 	DBG("\n\n width=%d   height=%d \n\n", width, height);
 }
 
-void isf_setting_input_language_changed_cb(keynode_t *key, void *data)
-{
-	DBG("###################### ISE listen that input language\
-		changed ###########################\n");
-	char clang[256] = { 0 };
-	snprintf(clang, sizeof(clang), "%s",
-		 vconf_get_str(VCONFKEY_ISF_INPUT_LANG_STR));
-	DBG("######################current input language is %s \
-			##############################\n",clang);
-
-	for (int loop = 0; loop < MAX_LANG_NUM; loop++) {
-		if (!strcmp(clang, scim::scim_get_language_name_english(IseLangData[1][loop].
-							  name).c_str())) {
-			gExplicitLanguageSetting = loop;
-			break;
-		}
-	}
-}
-
 static void slot_reload_config_callback(const HelperAgent *, int ic,
 					const String &uuid)
 {
@@ -666,16 +654,12 @@ static Eina_Bool _client_message_cb(void *data, int type, void *event)
 
 void hibernation_enter_callback(void *data)
 {
-	vconf_ignore_key_changed(VCONFKEY_ISF_INPUT_LANG_STR,
-				isf_setting_input_language_changed_cb);
 	vconf_ignore_key_changed(VCONFKEY_LANGSET,
 				isf_setting_language_changed_cb);
 }
 
 void hibernation_leave_callback(void *data)
 {
-	vconf_notify_key_changed(VCONFKEY_ISF_INPUT_LANG_STR,
-				isf_setting_input_language_changed_cb, NULL);
 	vconf_notify_key_changed(VCONFKEY_LANGSET,
 				isf_setting_language_changed_cb, NULL);
 }
@@ -710,12 +694,9 @@ void run(const String &display)
 	heynoti_subscribe(slp_fd, "HIBERNATION_LEAVE",
 			  hibernation_leave_callback, NULL);
 
-	vconf_notify_key_changed(VCONFKEY_ISF_INPUT_LANG_STR,
-				 isf_setting_input_language_changed_cb, NULL);
 	vconf_notify_key_changed(VCONFKEY_LANGSET,
 				 isf_setting_language_changed_cb, NULL);
 
-	snprintf(clang, sizeof(clang), "%s", vconf_get_str(VCONFKEY_ISF_INPUT_LANG_STR));
 	snprintf(clang, sizeof(clang), "%s", vconf_get_str(VCONFKEY_LANGSET));
 
 	for (int loop = 0; loop < MAX_LANG_NUM; loop++) {
@@ -747,6 +728,7 @@ void run(const String &display)
 	helper_agent.signal_connect_update_candidate_geometry(slot(slot_update_candidate_rect));
 	helper_agent.signal_connect_update_spot_location(slot(slot_update_spot_location));
 	helper_agent.signal_connect_set_caps_mode(slot(slot_set_caps_mode));
+	helper_agent.signal_connect_update_cursor_position( slot (slot_update_cursor_position));
 	helper_agent.signal_connect_get_language_locale( slot (slot_get_language_locale));
 	helper_agent.signal_connect_reload_config(slot(slot_reload_config_callback));
 	helper_agent.signal_connect_set_return_key_type (slot (slot_set_return_key_type));
@@ -783,8 +765,6 @@ void run(const String &display)
 	signal(SIGHUP, signalhandler);
 	elm_run();
 
-	vconf_ignore_key_changed(VCONFKEY_ISF_INPUT_LANG_STR,
-					isf_setting_input_language_changed_cb);
 	vconf_ignore_key_changed(VCONFKEY_LANGSET,
 					isf_setting_language_changed_cb);
 	ecore_event_handler_del(XClientMsgHandler);

@@ -640,7 +640,7 @@ static void _lang_list_sel(void *data, Evas_Object *obj, void *event_info)
 		elm_object_disabled_set(button, EINA_FALSE);
 	else {
 		lang_popup = elm_popup_add(list);
-		elm_check_state_set(obj,1);
+		elm_check_state_set(check,1);
 		_setup_info.lang_count = 1;
 		elm_object_text_set(lang_popup, dgettext(GETTEXT_PACKAGE, "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"));
 		elm_popup_timeout_set(lang_popup, 3.0);

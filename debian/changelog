@@ -1,3 +1,60 @@
+ise-default (0.2.2-68) unstable; urgency=low
+
+  * Fix the flickering on moving to text entry while auto capitalisation is on (N_SE-729)
+  * Tap & hold on key with autopoup(additional letters) the highlighted letter is not inputted on release
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-68
+
+ -- Ankush Dua <ankush.d@samsung.com>  Fri, 20 Apr 2012 14:53:27 +0530
+
+ise-default (0.2.2-67) unstable; urgency=low
+
+  * Disallow the context popup to accept focus (BOT-1478)
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-67
+
+ -- Sungmin Kwak <sungmin.kwak@samsung.com>  Thu, 19 Apr 2012 19:33:10 +0900
+
+ise-default (0.2.2-66) unstable; urgency=low
+
+  * Keep the last language in the Writing languages list unselected
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-66
+
+ -- Janani K <janani.k@samsung.com>  Wed, 18 Apr 2012 10:47:02 +0530
+
+ise-default (0.2.2-65) unstable; urgency=low
+
+  * Disable BACK button when all keyboard languages are deselected.
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-65
+
+ -- Sungmin Kwak <sungmin.kwak@samsung.com>  Wed, 18 Apr 2012 13:23:39 +0900
+
+ise-default (0.2.2-64) unstable; urgency=low
+
+  * Enable changeable area to each language to be shown in Email/URL mode
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-64
+
+ -- Ankush Dua <ankush.d@samsung.com>  Tue, 17 Apr 2012 15:08:40 +0530
+
+ise-default (0.2.2-63) unstable; urgency=low
+
+  * Fix Enter key press image when CAP lock mode
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-63
+
+ -- Sungmin Kwak <sungmin.kwak@samsung.com>  Thu, 12 Apr 2012 21:58:27 +0900
+
+ise-default (0.2.2-62) unstable; urgency=low
+
+  * Removed references to unused VCONFKEY_ISF_INPUT_LANG_STR macro
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-62
+
+ -- Ankush Dua <ankush.d@samsung.com>  Tue, 10 Apr 2012 16:27:29 +0530
+
 ise-default (0.2.2-61) unstable; urgency=low
 
   * Emoticon Popup displayed does not show correctly - fixed

@@ -760,7 +760,7 @@ distributing this software or its derivatives.
 		_Label_ {{""},{""},{""}},
 		LABEL_PROPERTIES_QTY_BOTTOM_LINE_TYPE,
 		_LabelImg_ {{"textinput_qwerty_icon_enter.png","textinput_qwerty_icon_enter.png","textinput_qwerty_icon_enter_disabled.png"}, {"textinput_qwerty_icon_enter.png","textinput_qwerty_icon_enter.png","textinput_qwerty_icon_enter_disabled.png"}, {"textinput_qwerty_icon_enter.png","textinput_qwerty_icon_enter.png","textinput_qwerty_icon_enter_disabled.png"}},
-		_BGImg_ {{"textinput_qwerty_button_function.png","textinput_qwerty_button_press.png","textinput_qwerty_button_function.png"}, {"textinput_qwerty_button_function.png","textinput_qwerty_button_press.png","textinput_qwerty_button_function.png"}, {"textinput_qwerty_button_function.png","textinput_qwerty_button_function.png","textinput_qwerty_button_nml.png"}},
+		_BGImg_ {{"textinput_qwerty_button_function.png","textinput_qwerty_button_press.png","textinput_qwerty_button_function.png"}, {"textinput_qwerty_button_function.png","textinput_qwerty_button_press.png","textinput_qwerty_button_function.png"}, {"textinput_qwerty_button_function.png","textinput_qwerty_button_press.png","textinput_qwerty_button_nml.png"}},
 		1,
 		_KeyVal_ {{""},{""},{""}},
 		_KeyEvt_{{MVK_Return},{MVK_Return},{MVK_Return}},
