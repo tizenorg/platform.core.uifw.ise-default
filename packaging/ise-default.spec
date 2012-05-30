@@ -5,6 +5,7 @@ Release:    68
 Group:      TO_BE/FILLED_IN
 License:    Samsung Proprietary License
 Source0:    %{name}-%{version}.tar.gz
+Source1001: packaging/ise-default.manifest 
 Requires(post): /sbin/ldconfig, /bin/ln
 Requires(postun): /sbin/ldconfig
 BuildRequires: libgcrypt-devel
@@ -25,6 +26,7 @@ Description: Tizen keyboard
 %setup -q
 
 %build
+cp %{SOURCE1001} .
 ./bootstrap
 PREFIX="%{_prefix}"; export PREFIX
 %configure --disable-static --prefix=%{_prefix}
@@ -37,6 +39,7 @@ rm -rf %{buildroot}
 %make_install
 
 %files
+%manifest ise-default.manifest
 %defattr(-,root,root,-) 
 %{_libdir}/scim-1.0/1.4.0/*
 %{_datadir}/isf/ise/ise-default/*
