@@ -1,0 +1,45 @@
+msgid "IDS_IME_OPT_LANG_DUTCH"
+msgstr "Nederlands"
+
+msgid "IDS_IME_OPT_LANG_ENGLISH"
+msgstr "English"
+
+msgid "IDS_IME_OPT_LANG_FRENCH"
+msgstr "Français"
+
+msgid "IDS_IME_OPT_LANG_GERMAN"
+msgstr "Deutsch"
+
+msgid "IDS_IME_OPT_LANG_GREEK"
+msgstr "Ελληνικά"
+
+msgid "IDS_IME_OPT_LANG_RUSSIAN"
+msgstr "Русский"
+
+msgid "IDS_IME_OPT_LANG_SPANISH"
+msgstr "Español"
+
+msgid "IDS_IME_OPT_LANG_TURKISH"
+msgstr "Türkçe"
+
+msgid "IDS_IME_POP_LANG_ITALIAN"
+msgstr "Italiano"
+
+msgid "IDS_IME_POP_LANG_PORTUGUESE"
+msgstr "Português"
+
+msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
+msgstr "Vous devez sélectionner au moins une langue dans les paramètres du clavier"
+
+msgid "IDS_IME_BODY_HARDWARE_KEYBOARD"
+msgstr "Clavier matériel"
+
+msgid "IDS_IME_BODY_KEYBOARD_LANGUAGES"
+msgstr "Langues du clavier"
+
+msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
+msgstr "Paramètres du clavier"
+
+msgid "IDS_IME_BODY_SOFTWARE_KEYBOARD"
+msgstr "Clavier logiciel"
+

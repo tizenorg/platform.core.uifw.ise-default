@@ -1,0 +1,9 @@
+ise-default (0.2.2-68) unstable; urgency=low
+
+  * Fix the flickering on moving to text entry while auto capitalisation is on (N_SE-729)
+  * Tap & hold on key with autopoup(additional letters) the highlighted letter is not inputted on release
+  * Git: pkgs/i/ise-default
+  * Tag: ise-default_0.2.2-68
+
+ -- Ankush Dua <ankush.d@samsung.com>  Fri, 20 Apr 2012 14:53:27 +0530
+
