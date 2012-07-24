@@ -3,7 +3,7 @@ Summary:    Tizen keyboard
 Version:    0.2.2
 Release:    68
 Group:      TO_BE/FILLED_IN
-License:    Samsung Proprietary License
+License:    Flora Software License
 Source0:    %{name}-%{version}.tar.gz
 Source1001: packaging/ise-default.manifest 
 Requires(post): /sbin/ldconfig, /bin/ln
