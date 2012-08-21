@@ -66,7 +66,10 @@ ise_default_la_SOURCES	= isemain.cpp ise.cpp ise-default-setting.cpp languageset
  
 
 ise_default_la_CXXFLAGS = -I$(top_srcdir)/res/ \
-							@ELM_CFLAGS@ @SLP_UTILX_CFLAGS@ @HEYNOTI_CFLAGS@ @IMF_CFLAGS@ @GLIB_CFLAGS@ @VCONF_CFLAGS@ @AUL_CFLAGS@ @ISF_CFLAGS@ @ECOREX_CFLAGS@ @X11_CFLAGS@ @UIGADGET_CFLAGS@
+							@ELM_CFLAGS@ @SLP_UTILX_CFLAGS@ @HEYNOTI_CFLAGS@ @IMF_CFLAGS@ \
+							@GLIB_CFLAGS@ @VCONF_CFLAGS@ @SENSOR_CFLAGS@ \
+							@ISF_CFLAGS@ @ECOREX_CFLAGS@ @X11_CFLAGS@
+
 
 ise_default_la_LDFLAGS	= -avoid-version \
 		   	  			   -rpath $(moduledir) \
@@ -78,15 +81,14 @@ ise_default_la_LDFLAGS	= -avoid-version \
 						   @IMF_LIBS@ \
 						   @VCONF_LIBS@ \
                                                    @GLIB_LIBS@ \
-                                                   @AUL_LIBS@ \
+                                                   @SENSOR_LIBS@ \
 						   @ISF_LIBS@ \
 						   @ECOREX_LIBS@ \
-						   @X11_LIBS@ \
-						   @UIGADGET_LIBS@
+						   @X11_LIBS@
 		
 ise_default_la_LIBADD	= \
 									@ELM_LIBS@ @SLP_UTILX_LIBS@ @HEYNOTI_LIBS@ @IMF_LIBS@ @VCONF_LIBS@ \
-									@UIGADGET_LIBS@ @AUL_LIBS@ 
+									@SENSOR_LIBS@
 
                                
 ise_default_setup_la_SOURCES  = efl_ise_setup.cpp languagesetting.cpp
@@ -97,8 +99,8 @@ ise_default_setup_la_CXXFLAGS = \
 									-DISE_NAME=\"ise-default\" \
 									-DIMG_PATH_PREFIX=\"@PREFIX_DIR@/share/isf/ise/ise-default\" \
 									@ELM_CFLAGS@ @SLP_UTILX_CFLAGS@ @HEYNOTI_CFLAGS@ @IMF_CFLAGS@ \
-									@GLIB_CFLAGS@ @VCONF_CFLAGS@ @AUL_CFLAGS@ \
-									@UIGADGET_CFLAGS@ \
+									@GLIB_CFLAGS@ @VCONF_CFLAGS@ \
+									@SENSOR_CFLAGS@ \
 									-DSETUP_BUILD
 
 
@@ -108,7 +110,7 @@ ise_default_setup_la_LDFLAGS  = \
 
 ise_default_setup_la_LIBADD  = \
 									@ELM_LIBS@ @SLP_UTILX_LIBS@ @HEYNOTI_LIBS@ @IMF_LIBS@ @VCONF_LIBS@ \
-									@UIGADGET_LIBS@ @AUL_LIBS@
+									@SENSOR_LIBS@
 
 
 

@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include "mcfwindows.h"
@@ -222,12 +221,6 @@ mcfwindow CMCFWindows::open_popup(const mcfwindow parentWnd, const mcfint parent
                         mcfint y = popup_coordination->y + (popup_coordination->height / 2);
                         controller->mouse_press(window, x, y, context->get_last_touch_device_id());
                     }
-                }
-
-                context->set_cur_pressed_window(context->get_last_touch_device_id(), window);
-                context->set_cur_pressed_key(context->get_last_touch_device_id(), min_dist_index);
-                if(btncontext) {
-                    btncontext->state = BUTTON_STATE_NORMAL;
                 }
 
                 windows->update_window(window, coordination->x, coordination->y, coordination->width, coordination->height);
@@ -773,6 +766,32 @@ void CMCFWindows::set_parent( const mcfwindow parentWindow, const mcfwindow wind
         }
     }
 }
+
+void CMCFWindows::set_window_rotation(const mcfwindow window, const mcfint degree)
+{
+    MCF_DEBUG();
+
+    CMCFWindowsImpl* impl = get_mcf_windows_impl();
+
+    if(impl) {
+        if (window == NULL) {
+            impl->set_window_rotation(mBaseWinCtx.window, degree);
+
+            if (MCFWINDOW_INVALID != mDimWinCtx.window) {
+                /* For indivisual window rotation */
+                impl->set_window_rotation(mDimWinCtx.window, degree);
+                hide_window(mDimWinCtx.window);
+            }
+        } else {
+            impl->set_window_rotation(window, degree);
+            printf("## set_window_rotation : %d \n", degree);
+        }
+    }
+
+    // Update the position information
+    get_window_context(window, TRUE);
+}
+
 
 void
 CMCFWindows::show_window(const mcfwindow window, mcfboolean queue /*= FALSE*/)

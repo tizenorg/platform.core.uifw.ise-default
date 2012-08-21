@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include "mcfdebug.h"
@@ -23,11 +22,11 @@
 #include <Elementary.h>
 #include <Ecore_X.h>
 #include <Ecore_IMF.h>
+#include <X11/Xlib.h>
 #include <gmodule.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ui-gadget.h>
-#include <aul.h>
+#include <sensor.h>
 
 /* For ISE Interface. The below defines should be included in the file
    for processing a controlling data between active appl and this ISE  */
@@ -97,10 +96,10 @@ struct _IseSettings {
 	Evas_Object *parent;
 	Evas_Object *option_window;
 	Evas_Object *option_layout;
+	int rotation_angle;
 	Elm_Object_Item *First_item;
 	Evas_Object *naviframe;
 	Evas_Object *effect_ly;
-	struct ui_gadget *ug;
 	char *SelLang;
 	int SelKeypad;
 	bool openedViaGadget;
@@ -142,6 +141,43 @@ static void _lang_set_cb(void *data, Evas_Object *obj, void *event_info);
 static void _option_cancel_cb(void *data, Evas_Object *obj, void *event_info);
 static void _option_done_cb(void *data, Evas_Object *obj, void *event_info);
 
+int sensor_handle = -1;
+
+void rotation_callback_func(unsigned int event_type,
+			    sensor_event_data_t *event, void *data)
+{
+	const int MAX_MANIPULATED_ANGLES = 4;
+	const int manipulated_angles[MAX_MANIPULATED_ANGLES][2] = {
+		{ROTATION_EVENT_0, PORTRAIT_DEGREE_0},
+		{ROTATION_EVENT_90, LANDSCAPE_DEGREE_270},
+		{ROTATION_EVENT_180, PORTRAIT_DEGREE_180},
+		{ROTATION_EVENT_270, LANDSCAPE_DEGREE_90},
+	};
+
+	int *my_event_data = NULL;
+
+	if (event_type != ACCELEROMETER_EVENT_ROTATION_CHECK || event == NULL) {
+		return;
+	}
+	my_event_data = (int *)(event->event_data);
+
+	if (my_event_data) {
+		printf("rotation_callback_func : %d\n", *my_event_data);
+		bool bFound = false;
+		for (int loop = 0; loop < MAX_MANIPULATED_ANGLES; loop++) {
+			if (*my_event_data == manipulated_angles[loop][0]) {
+				ad.rotation_angle = manipulated_angles[loop][1];
+				bFound = true;
+			}
+		}
+
+		if (bFound) {
+			elm_win_rotation_with_resize_set(ad.option_window,
+							 ad.rotation_angle);
+		}
+	}
+}
+
 Evas_Object *create_setup_genlist(Evas_Object *layout_main,
 				  Evas_Object *naviframe, SETTING_INFO info)
 {
@@ -152,6 +188,7 @@ Evas_Object *create_setup_genlist(Evas_Object *layout_main,
 	memset(&ad,0x0,sizeof(Ise_Settings));
 	ad.option_layout = layout_main;
 	ad.naviframe = naviframe;
+	ad.rotation_angle=PORTRAIT_DEGREE_0;
 	ad.parent = NULL;
 	ad.openedViaGadget = TRUE;
 
@@ -216,11 +253,15 @@ static Evas_Object *create_main_window()
 	ecore_x_icccm_name_class_set(elm_win_xwindow_get
 				     (static_cast<Evas_Object *>(window)),
 				     "Setting Window", "ISF");
+	elm_win_rotation_set(window, ad.rotation_angle);
 	ecore_x_window_size_get(ecore_x_window_root_first_get(), &win_w,
 				&win_h);
 	evas_object_move(window, 0, 0);
 
-	evas_object_resize(window, win_w, win_h);
+	if (ad.rotation_angle == 90 || ad.rotation_angle == 270)
+		evas_object_resize(window, win_h, win_w);
+	else
+		evas_object_resize(window, win_w, win_h);
 
 	elm_win_borderless_set(window, 1);
 	evas_object_show(window);
@@ -328,6 +369,7 @@ static Evas_Object *create_option_mainview(Evas_Object *parent)
 	static Elm_Genlist_Item_Class itcSeparator;
 
 	Evas_Object *genlist = elm_genlist_add(ad.naviframe);
+	elm_object_style_set(genlist, "dialogue");
 
 	static Elm_Genlist_Item_Class itcOnOff;
 	static Elm_Genlist_Item_Class itcOnOff2;
@@ -340,7 +382,7 @@ static Evas_Object *create_option_mainview(Evas_Object *parent)
 	itcTextOnly.func.del = _gl_del;
 
 	/* Set item class for dialogue seperator*/
-	itcSeparator.item_style = "dialogue/seperator";
+	itcSeparator.item_style = "dialogue/separator/21/with_line";
 	itcSeparator.func.text_get = NULL;
 	itcSeparator.func.content_get = NULL;
 	itcSeparator.func.state_get = NULL;
@@ -348,7 +390,7 @@ static Evas_Object *create_option_mainview(Evas_Object *parent)
 
 	Elm_Object_Item *separator = elm_genlist_item_append(genlist, &itcSeparator, NULL, NULL,
 												ELM_GENLIST_ITEM_NONE, NULL, NULL);
-	elm_genlist_item_select_mode_set(separator, ELM_OBJECT_SELECT_MODE_NONE);
+	elm_genlist_item_select_mode_set(separator, ELM_OBJECT_SELECT_MODE_DISPLAY_ONLY);
 
 #if MAX_LANG_NUM > 2
 	strncpy(itemdata[LANGUAGE_ID].text, LANGUAGE, ITEM_DATA_STRING_LEN - 1);
@@ -375,7 +417,7 @@ static Evas_Object *create_layout(Evas_Object *parent)
 
 	/* create a main layout */
 	ly = elm_layout_add( parent );
-	elm_layout_theme_set( ly, "layout", "application", "default" );
+	elm_layout_theme_set(ly, "layout", "application", "default");
 	evas_object_size_hint_weight_set( ly, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
 	elm_win_resize_object_add( parent, ly );
 	evas_object_show( ly );
@@ -471,6 +513,16 @@ void clean_up()
 		ecore_event_handler_del(evtHandler);
 	evtHandler = NULL;
 
+	if (sensor_handle >= 0) {
+		sf_unregister_event(sensor_handle, ACCELEROMETER_EVENT_ROTATION_CHECK);
+		if (sensor_handle < 0) {
+			printf("t sensor_unregister_cb fail\n");
+		}
+
+		sf_stop(sensor_handle);
+		sf_disconnect(sensor_handle);
+		sensor_handle = -1;
+	}
 }
 
 static void list_selected(void *data, Evas_Object *obj, void *event_info)
@@ -770,13 +822,14 @@ static void _option_done_cb(void *data, Evas_Object *obj, void *event_info)
 	clean_up();
 }
 
-void _show_option_window(Evas_Object *parentWidget)
+void _show_option_window(Evas_Object *parentWidget, mcfint degree)
 {
 	Evas_Object *window = NULL;
 	Evas_Object *layout = NULL;
 	bool indicator = FALSE;
 	Evas_Object *cancel_btn, *done_btn;
 
+	ad.rotation_angle = degree;
 	ad.parent = NULL;
 	ad.openedViaGadget = TRUE;
 
@@ -827,7 +880,7 @@ static void set_transient_for_app_window(Evas_Object *option_win)
 }
 
 void
-_show_option_window_ise(Evas_Object *parentWidget,
+_show_option_window_ise(Evas_Object *parentWidget, mcfint degree,
 								SETTING_INFO previnfo,
 								void mainback(SETTING_INFO currentInfo))
 {
@@ -837,6 +890,27 @@ _show_option_window_ise(Evas_Object *parentWidget,
 	callback = mainback;
 	ad.openedViaGadget = FALSE;
 	_setup_info = previnfo;
+	sensor_handle = sf_connect(ACCELEROMETER_SENSOR);
+	if (sensor_handle < 0) {
+		printf("sensor attach fail\n");
+
+	}
+	int state =
+	    sf_register_event(sensor_handle, ACCELEROMETER_EVENT_ROTATION_CHECK,
+			      NULL, rotation_callback_func, NULL);
+	if (state < 0) {
+		printf("sensor_register_cb fail\n");
+
+	}
+
+	state = sf_start(sensor_handle, 0);
+	if (state < 0) {
+		printf("SLP_sensor_start fail\n");
+	}
+	printf("Start SF done\n");
+
+	/* Do not open option window if our ISE was
+	 * called by option window itself ( dictionary) */
 
 	for (unsigned int loop = 0; loop < MAX_LANG_NUM; loop++) {
 		if (IseLangData[KEYPAD_QWERTY][loop].name) {
@@ -851,20 +925,17 @@ _show_option_window_ise(Evas_Object *parentWidget,
 
 	if (ad.option_window) {
 		window = ad.option_window;
+		elm_win_rotation_with_resize_set(ad.option_window, degree);
 		evas_object_show(ad.option_window);
 		indicator = TRUE;
 	} else {
 		memset(&ad, 0x0, sizeof(Ise_Settings));
+		ad.rotation_angle = degree;
 		/* create option window */
 		window = create_main_window();
 		ad.option_window = window;
 		elm_win_indicator_mode_set(window, ELM_WIN_INDICATOR_SHOW);
 		indicator = FALSE;
-		Evas_Coord win_w = 0, win_h = 0;
-		ecore_x_window_size_get(ecore_x_window_root_first_get(), &win_w, &win_h);
-		if(win_w) {
-			elm_config_scale_set(win_w / BASE_THEME_WIDTH);
-		}
 	}
 
 	/* create main layout */

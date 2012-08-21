@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #ifndef _DEFAULTISE_H_
@@ -141,6 +140,7 @@ unsigned int ise_get_language();
 unsigned int ise_get_mode();
 void ise_set_layout(mcfu32 layoutIdx);
 mcfu32 ise_get_layout();
+void ise_set_screen_direction(int degree);
 void ise_get_size(int *x, int *y, int *width, int *height);
 void ise_update_cursor_position(int position);
 void ise_update_spot_location(int x, int y);

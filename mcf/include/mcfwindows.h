@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include <stdio.h>
@@ -86,6 +85,7 @@ public :
     virtual bool destroy_window(mcfwindow window) = 0;
     virtual void set_parent(const mcfwindow parentWindow, const mcfwindow window) = 0;
     virtual void show_window(const mcfwindow window, mcfboolean queue) = 0;
+    virtual void set_window_rotation(const mcfwindow window, const mcfint degree) = 0;
     virtual void hide_window(const mcfwindow window,  const mcfboolean fForce = FALSE) = 0;
     virtual void move_window(const mcfwindow window, const mcf16 x, const mcf16 y) = 0;
     virtual void move_resize_window(const mcfwindow window, const mcf16 x, const mcf16 y,
@@ -125,6 +125,8 @@ public :
     void hide_window(const mcfwindow window,  const mcfboolean fForce = FALSE);
     void set_parent(const mcfwindow parentWindow, const mcfwindow window);
     void set_keep_above(const mcfwindow window, const mcfboolean keepabove);
+
+    void set_window_rotation(const mcfwindow window, const mcfint degree);
 
     void move_window(const mcfwindow window, const mcf16 x, const mcf16 y);
     void resize_window(const mcfwindow window, const mcf16 width, const mcf16 height);

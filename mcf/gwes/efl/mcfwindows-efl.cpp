@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include "mcfwindows-efl.h"
@@ -96,20 +95,34 @@ CMCFWindowsImplEfl::create_context_popup_window(const mcfwindow parentWnd)
     CMCFWindows *windows = CMCFWindows::get_instance();
     MCF_DEBUG();
     int w,h;
+    if(mcf_context_window) {
+        evas_object_del(mcf_context_window);
+        mcf_context_window = NULL;
+    }
     mcf_context_window = elm_win_add(NULL, "MCFContextPopup", ELM_WIN_BASIC);
-    Ecore_X_Display* dpy;
-    dpy = ecore_x_display_get();
-    elm_win_borderless_set(mcf_context_window, EINA_TRUE);
-    elm_win_alpha_set(mcf_context_window, EINA_TRUE);
-    ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
-    ecore_x_icccm_name_class_set(elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), "ISF Context Popup", "ISF");
-    set_window_accepts_focus( mcf_context_window, FALSE);
-    utilx_set_window_effect_state((Display*)dpy, elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), 0);
-    CMCFContext *context = CMCFContext::get_instance();
-    evas_object_resize(mcf_context_window, w, h);
-    evas_object_show(mcf_context_window);
-    if(!(windows->get_update_pending())) {
-      update_window(mcf_context_window);
+    if (mcf_context_window) {
+        Ecore_X_Display* dpy;
+        dpy = ecore_x_display_get();
+        elm_win_borderless_set(mcf_context_window, EINA_TRUE);
+        elm_win_alpha_set(mcf_context_window, EINA_TRUE);
+        ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
+        ecore_x_icccm_name_class_set(elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), "ISF Context Popup", "ISF");
+        set_window_accepts_focus(mcf_context_window, FALSE);
+        utilx_set_window_effect_state((Display*)dpy, elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), 0);
+        CMCFContext *context = CMCFContext::get_instance();
+        set_window_rotation(mcf_context_window, context->get_rotation_degree());
+        if(context->get_rotation_degree() == 0   ||
+           context->get_rotation_degree() == 180 ||
+           context->get_rotation_degree() == 360) {
+          evas_object_resize(mcf_context_window, w, h);
+        }
+        else {
+          evas_object_resize(mcf_context_window, h, w);
+        }
+        evas_object_show(mcf_context_window);
+        if(!(windows->get_update_pending())) {
+          update_window(mcf_context_window);
+        }
     }
     return mcf_context_window;
 }
@@ -157,6 +170,8 @@ CMCFWindowsImplEfl::create_window(const mcfwindow parentWnd, McfWindowContext *w
     utilx_set_window_effect_state((Display*)dpy, elm_win_xwindow_get(static_cast<Evas_Object*>(win)), 0);
 
     CMCFContext *context = CMCFContext::get_instance();
+    set_window_rotation(win, context->get_rotation_degree());
+
     return win;
 }
 
@@ -185,6 +200,7 @@ CMCFWindowsImplEfl::create_dim_window(const mcfwindow parentWnd, McfWindowContex
     utilx_set_window_effect_state((Display*)dpy, elm_win_xwindow_get(static_cast<Evas_Object*>(win)), 0);
 
     CMCFContext *context = CMCFContext::get_instance();
+    set_window_rotation(win, context->get_rotation_degree());
 
     hide_window(win);
 
@@ -416,6 +432,25 @@ CMCFWindowsImplEfl::move_window(const mcfwindow window, const mcf16 x, const mcf
         /* get window size */
         utils->get_screen_resolution(&scr_w, &scr_h);
 
+        switch(context->get_rotation_degree())
+        {
+            case 90: {
+                rotatex = orgy;
+                rotatey = scr_h - orgx - win_width;
+            }
+            break;
+            case 180: {
+                rotatex = scr_w - orgx - win_width;
+                rotatey = scr_h - orgy - win_height;
+            }
+            break;
+            case 270: {
+                rotatex = scr_w - orgy - win_height;
+                rotatey = orgx;
+            }
+            break;
+        }
+
         Evas_Object *win = (Evas_Object*)window;
 #ifndef FULL_SCREEN_TEST
         evas_object_move(win, rotatex, rotatey);
@@ -602,16 +637,83 @@ CMCFWindowsImplEfl::get_window_rect(const mcfwindow window, McfRectangle *rect)
 
         /* get window size */
         utils->get_screen_resolution(&scr_w, &scr_h);
-        rect->x = x;
-        rect->y = y;
-        rect->width = width;
-        rect->height = height;
+
+        switch(context->get_rotation_degree())
+        {
+        case 90: {
+                rect->width = height;
+                rect->height = width;
+                rect->x = scr_h - y - height;
+                rect->y = x;
+            }
+            break;
+        case 180: {
+                rect->x = scr_w - width - x;
+                rect->y = scr_h - height - y;
+                rect->width = width;
+                rect->height = height;
+            }
+            break;
+        case 270: {
+                rect->width = height;
+                rect->height = width;
+                rect->x = y;
+                rect->y = scr_w - x - width;
+            }
+            break;
+        default: {
+                rect->x = x;
+                rect->y = y;
+                rect->width = width;
+                rect->height = height;
+            }
+            break;
+        }
     }
 
     return TRUE;
 }
 
 #include <X11/Xutil.h>
+/**
+ * Sets rotation
+ */
+void
+CMCFWindowsImplEfl::set_window_rotation(const mcfwindow window, const mcfint degree)
+{
+    MCF_DEBUG();
+
+    CMCFWindows *windows = CMCFWindows::get_instance();
+    McfWindowContext *winctx = NULL;
+
+    if(windows) {
+        winctx = windows->get_window_context(window, FALSE);
+    }
+
+    if(winctx) {
+        if(winctx->isVirtual) {
+            return;
+        }
+    }
+
+    elm_win_rotation_set(static_cast<Evas_Object*>(window),degree);
+
+    XSizeHints hint;
+    long int mask;
+    Window win;
+    Display *dpy;
+
+    dpy = (Display*)ecore_x_display_get();
+    win = elm_win_xwindow_get((Evas_Object*)window);
+
+    if(!XGetWMNormalHints(dpy, win, &hint, &mask))
+       memset(&hint, 0, sizeof(XSizeHints));
+
+    hint.flags |= USPosition;
+
+    XSetWMNormalHints(dpy, win, &hint);
+}
+
 
 /**
  * Shows a message box

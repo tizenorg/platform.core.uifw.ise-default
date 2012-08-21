@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include <stdio.h>
@@ -131,6 +130,22 @@ CMCFCore::set_input_mode(mcf8 mode, mcfboolean clearEverything /* = FALSE */)
         }
         ret = controller->process_input_mode_change(mode, !clearEverything);
         windows->update_window(windows->get_base_window());
+    }
+    return ret;
+}
+
+/**
+ * Sets the current display mode to the given mode
+ * Available display is "DISPLAY_PORTRAIT, DISPLAY_LANDSCAPE"
+ */
+mcfboolean
+CMCFCore::set_display_mode(mcfint degree)
+{
+    MCF_DEBUG();
+    mcfboolean ret = FALSE;
+    CMCFController *controller = CMCFController::get_instance();
+    if (controller) {
+        ret = controller->process_display_change(degree);
     }
     return ret;
 }

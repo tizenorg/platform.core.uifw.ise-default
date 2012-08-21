@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #define Uses_SCIM_HELPER
@@ -22,10 +21,8 @@
 #include <mcf.h>
 #include "ise.h"
 #include "include/window_slide_animator.h"
-#include <ui-gadget.h>
 
 using namespace mcf;
-extern struct ui_gadget *ug;
 extern Evas_Object *box;
 extern Evas_Object *main_window;
 
@@ -116,10 +113,6 @@ Eina_Bool CWindowSlideAnimator::timer_event(void *data)
 				pAnimator->
 				    get_decorator()->animation_timer_cb();
 			}
-			if (ug) {
-				ug_destroy(ug);
-				ug = NULL;
-			}
 			if (box) {
 				elm_win_resize_object_del(main_window, box);
 				evas_object_del(box);
@@ -132,8 +125,8 @@ Eina_Bool CWindowSlideAnimator::timer_event(void *data)
 	return TRUE;
 }
 
-void CWindowSlideAnimator::get_window_position(int width, int height,
-						      int *showx,
+void CWindowSlideAnimator::get_window_pos_by_rotation(int width, int height,
+						      int degree, int *showx,
 						      int *showy, int *hidex,
 						      int *hidey)
 {
@@ -143,10 +136,40 @@ void CWindowSlideAnimator::get_window_position(int width, int height,
 	Evas_Coord win_w, win_h;
 	ecore_x_window_size_get(ecore_x_window_root_first_get(), &win_w,
 				&win_h);
-	lshowx = (win_w - width) / 2;
-	lshowy = win_h - height;
-	lhidex = lshowx;
-	lhidey = win_h;
+	switch (degree) {
+	case 90:
+		{
+			lshowx = win_w - height;
+			lshowy = (win_h - width) / 2;
+			lhidex = win_w;
+			lhidey = lshowy;
+		}
+		break;
+	case 180:
+		{
+			lshowx = (win_w - width) / 2;
+			lshowy = 0;
+			lhidex = lshowx;
+			lhidey = -height;
+		}
+		break;
+	case 270:
+		{
+			lshowx = 0;
+			lshowy = (win_h - width) / 2;
+			lhidex = -height;
+			lhidey = lshowy;
+		}
+		break;
+	default:
+		{
+			lshowx = (win_w - width) / 2;
+			lshowy = win_h - height;
+			lhidex = lshowx;
+			lhidey = win_h;
+		}
+		break;
+	}
 
 	if (showx)
 		*showx = lshowx;
@@ -201,12 +224,13 @@ void CKesslerISEDecorator::set_target_window(Evas_Object *window)
 	mAnimator.set_target_window(window);
 }
 
-void CKesslerISEDecorator::start_show_animation(int width, int height)
+void CKesslerISEDecorator::start_show_animation(int width, int height,
+						int degree)
 {
 	int startx, starty;
 	int endx, endy;
 
-	CWindowSlideAnimator::get_window_position(width, height,
+	CWindowSlideAnimator::get_window_pos_by_rotation(width, height, degree,
 							 &endx, &endy, &startx,
 							 &starty);
 
@@ -226,12 +250,13 @@ void CKesslerISEDecorator::start_show_animation(int width, int height)
 }
 
 #include <X11/Xlib.h>
-void CKesslerISEDecorator::start_hide_animation(int width, int height)
+void CKesslerISEDecorator::start_hide_animation(int width, int height,
+						int degree)
 {
 	int startx, starty;
 	int endx, endy;
 
-	CWindowSlideAnimator::get_window_position(width, height,
+	CWindowSlideAnimator::get_window_pos_by_rotation(width, height, degree,
 							 &startx, &starty,
 							 &endx, &endy);
 
@@ -268,12 +293,13 @@ void CKesslerISEDecorator::start_hide_animation(int width, int height)
 	}
 }
 
-void CKesslerISEDecorator::finish_show_animation(int width, int height)
+void CKesslerISEDecorator::finish_show_animation(int width, int height,
+						 int degree)
 {
 	int startx, starty;
 	int endx, endy;
 
-	CWindowSlideAnimator::get_window_position(width, height,
+	CWindowSlideAnimator::get_window_pos_by_rotation(width, height, degree,
 							 &endx, &endy, &startx,
 							 &starty);
 

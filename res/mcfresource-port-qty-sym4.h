@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #ifdef KEY_CONFIGURE_PHASE
@@ -458,7 +457,7 @@
 		_BGImg_ {{"",""}, {"",""}, {"",""}},
 		0,
 		_KeyVal_ {{""},{""},{""}},
-		_KeyEvt_{{MVK_BackSpace},{MVK_BackSpace},{MVK_BackSpace}},
+		_KeyEvt_ {{MVK_BackSpace},{MVK_BackSpace},{MVK_BackSpace}},
 		"",
 		0,
 		TRUE,
@@ -469,12 +468,12 @@
 		{
 		USED, /* 4x1 */
 		0,
-		_Label_{{"123"},{"123"},{"123"}},
+		_Label_ {{"123"},{"123"},{"123"}},
 		LABEL_PROPERTIES_QTY_DEFAULT_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"",""}, {"",""}, {"",""}},
 		0,
-		_KeyVal_{{""},{""},{""}},
+		_KeyVal_ {{""},{""},{""}},
 		_KeyEvt_ {{UD_MVK_ABC},{UD_MVK_ABC},{UD_MVK_ABC}},
 		"Keypad",
 		UD_MVK_KEYPAD,
@@ -484,12 +483,12 @@
 	{
 		USED, /* 4x2 */
 		0,
-		_Label_{{""},{""},{""}},
+		_Label_ {{""},{""},{""}},
 		LABEL_PROPERTIES_QTY_BOTTOM_LINE_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"",""}, {"",""}, {"",""}},
 		0,
-		_KeyVal_{{""},{""},{""}},
+		_KeyVal_ {{""},{""},{""}},
 		_KeyEvt_ {{UD_MVK_LANG_CHANGE},{UD_MVK_LANG_CHANGE},{UD_MVK_LANG_CHANGE}},
 		"OptionWindow",
 		UD_MVK_OPTION_WINDOW,
@@ -499,13 +498,13 @@
 	{
 		USED, /*4x3 */
 		0,
-		_Label_{{""},{""},{""}},
+		_Label_ {{""},{""},{""}},
 		LABEL_PROPERTIES_QTY_BOTTOM_LINE_TYPE,
-		_LabelImg_ {{"textinput_icon_space.png","textinput_icon_space_press.png"}, {"textinput_icon_space.png","textinput_icon_space_press.png"}, {"textinput_icon_space.png","textinput_icon_space_press.png"}},
-		_BGImg_{{"textinput_qwerty_button_nml.png","textinput_qwerty_button_press.png","textinput_qwerty_button_nml.png"}, {"textinput_qwerty_button_nml.png","textinput_qwerty_button_press.png","textinput_qwerty_button_nml.png"}, {"textinput_qwerty_button_nml.png","textinput_qwerty_button_capslock_press.png"}},
+		_LabelImg_ {{"B09_icon_space.png","B09_icon_space_press.png","B09_icon_space.png"}, {"B09_icon_space.png","B09_icon_space_press.png","B09_icon_space.png"}, {"B09_icon_space.png","B09_icon_space_press.png","B09_icon_space.png"}},
+		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}},
 		0,
-		_KeyVal_{{""},{""},{""}},
-		_KeyEvt_{{MVK_space},{MVK_space},{MVK_space}},
+		_KeyVal_ {{""},{""},{""}},
+		_KeyEvt_ {{MVK_space},{MVK_space},{MVK_space}},
 		"",
 		0,
 		FALSE,
@@ -514,13 +513,13 @@
 	{
 		USED, /* 4x4 */
 		0,
-		_Label_{{"",""},{"",""},{"",""}},
+		_Label_ {{"",""},{"",""},{"",""}},
 		LABEL_PROPERTIES_4X4_DEFAULT_TYPE,
 		_LabelImg_ {{" "," "}, {" "," "}, {" "," "}},
 		_BGImg_ {{"",""}, {"",""}, {"",""}},
 		4,
-		_KeyVal_{{".",","},{".", ","}},
-		_KeyEvt_{{MVK_period, MVK_comma},{MVK_period, MVK_comma}},
+		_KeyVal_ {{".",","},{".", ","}},
+		_KeyEvt_ {{MVK_period, MVK_comma},{MVK_period, MVK_comma}},
 		"",
 		0,
 		FALSE,
@@ -536,7 +535,7 @@
 		_BGImg_ {{"",""}, {"",""}, {"",""}},
 		0,
 		_KeyVal_ {{""},{""},{""}},
-		_KeyEvt_{{MVK_Return},{MVK_Return},{MVK_Return}},
+		_KeyEvt_ {{MVK_Return},{MVK_Return},{MVK_Return}},
 		"",
 		0,
 		FALSE,

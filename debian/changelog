@@ -1,9 +1,49 @@
-ise-default (0.2.2-68) unstable; urgency=low
+ise-default (0.3.006-1) unstable; urgency=low
 
-  * Fix the flickering on moving to text entry while auto capitalisation is on (N_SE-729)
-  * Tap & hold on key with autopoup(additional letters) the highlighted letter is not inputted on release
-  * Git: pkgs/i/ise-default
-  * Tag: ise-default_0.2.2-68
+  * Keyboard settings Blank screen issue fixed
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.006-1
 
- -- Ankush Dua <ankush.d@samsung.com>  Fri, 20 Apr 2012 14:53:27 +0530
+ -- Ankush Dua <ankush.d@samsung.com>  Tue, 17 Aug 2012 11:43:43 +0530
+
+ise-default (0.3.005-1) unstable; urgency=low
+
+  * Context popup out of focus issue fixed
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.005-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Tue, 16 Aug 2012 16:53:48 +0530
+
+ise-default (0.3.004-1) unstable; urgency=low
+
+  * Added Padding for Keyboard Settings
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.004-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Tue, 14 Aug 2012 15:30:18 +0530
+
+ise-default (0.3.003-1) unstable; urgency=low
+
+  * Adding "tizen_build" tag
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.003-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Mon, 13 Aug 2012 15:09:18 +0530
+
+ise-default (0.3.002-1) unstable; urgency=low
+
+  * Keyboard options doesn't open if opened in landscape mode first
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.002-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Wed, 08 Aug 2012 16:43:18 +0900
+
+ise-default (0.3.001-1) unstable; urgency=low
+
+  * White Theme Applied
+  * Landscape and rotation support added
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.001-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Wed, 08 Aug 2012 15:29:18 +0900
 

@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(ise-default, 0.1.1, dalton.lee@samsung.com)
+AC_INIT(ise-default, 0.3.002, dalton.lee@samsung.com)
 AC_CONFIG_SRCDIR([src/ise.cpp])
 
 ELM_VERSION=0.0.1
@@ -74,11 +74,8 @@ PKG_CHECK_MODULES(GLIB, [glib-2.0 >= 0.0.0.1])
 # Check vconf library
 PKG_CHECK_MODULES(VCONF, [vconf >= 0.0.0.1])
 
-# Check AUL library
-PKG_CHECK_MODULES(AUL, [aul >= 0])
-
-# Check ui-gadget library
-PKG_CHECK_MODULES(UIGADGET, [ui-gadget >= 0])
+# Check sensor library
+PKG_CHECK_MODULES(SENSOR, [sensor >= 0])
 
 # Check isf library
 PKG_CHECK_MODULES(ISF, [isf >= 0])

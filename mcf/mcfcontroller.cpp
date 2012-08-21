@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include <time.h>
@@ -281,18 +280,27 @@ CMCFController::clear_multikey_buffer()
  * Sets the current display mode to the given mode
  */
 mcfboolean
-CMCFController::process_display_change()
+CMCFController::process_display_change(const mcfint degree)
 {
     MCF_DEBUG();
+    mcf_assert_return_false(degree >= 0);
     CMCFContext *context = CMCFContext::get_instance();
     CMCFWindows *windows = CMCFWindows::get_instance();
 
     if (context && windows) {
         mcf8 mode;
+        if (degree == 90 || degree == 270) {
+            mode = MCFDISPLAY_LANDSCAPE;
+        } else {
             mode = MCFDISPLAY_PORTRAIT;
+        }
 
         context->set_display(static_cast<MCFDisplay>(mode));
+        context->set_rotation_degree(degree);
         context->set_base_layout(mcf_input_mode_configure[context->get_input_mode()].layoutId[context->get_display()]);
+
+        /* Make sure to set window's rotation degree before sending engine signal, which adjusts the size of main window */
+        windows->set_window_rotation(NULL, degree);
 
         mcfwindow window = windows->get_base_window();
         handle_engine_signal(MCF_SIG_DISP_CHANGE, window);
@@ -733,6 +741,11 @@ CMCFController::process_button_move_event(mcfwindow window, mcfint x, mcfint y, 
                         /* calculates y position to be set */
                         mcfint scnWidth, scnHeight;
                         utils->get_screen_resolution(&scnWidth, &scnHeight);
+                        if (context->get_display() == MCFDISPLAY_LANDSCAPE) {
+                            int  tmp = scnWidth;
+                            scnWidth = scnHeight;
+                            scnHeight = tmp;
+                        }
 
                         const mcf16 uniqId = utils->get_unique_id();
                         context->set_cur_pressed_event_id(touchid, uniqId);
@@ -1529,13 +1542,6 @@ CMCFController::mouse_release(mcfwindow window, mcfint x, mcfint y, mcftouchdevi
                 if(grab_event) {
                     /* If the layout's addGrab* values are defined, process this event only if the event occured inside grab area */
                     mcfboolean in_grab_area = TRUE;
-/*                    if((layout->addGrabLeft != NOT_USED && x < -(layout->addGrabLeft)) ||
-                       (layout->addGrabRight != NOT_USED && x > (pressedCtx->width + layout->addGrabRight)) ||
-                       (layout->addGrabTop != NOT_USED && y < -(layout->addGrabTop)) ||
-                       (layout->addGrabBottom != NOT_USED && y > (pressedCtx->height + layout->addGrabBottom))) {
-                        in_grab_area = FALSE;
-                    }
-*/
                     if(in_grab_area) {
                         McfLayoutKeyCoordination *coord = cache->get_cur_layout_key_coordination(pressedWindow, pressedKey);
                         if(coord) {
@@ -2229,15 +2235,15 @@ CMCFController::timer_event(const mcf32 data)
         mcfbyte keyIndex = context->get_cur_pressed_key(context->get_last_touch_device_id());
 
         McfButtonContext *btncontext = cache->get_cur_button_context(window, keyIndex);
-        if (btncontext->state == BUTTON_STATE_PRESSED) {
-            btncontext->state = BUTTON_STATE_NORMAL;
-            CMCFWindows *windows = CMCFWindows::get_instance();
-            if (windows) {
-                const McfLayoutKeyCoordination *coordination = cache->get_cur_layout_key_coordination(window, keyIndex);
-                windows->update_window(window, coordination->x, coordination->y, coordination->width, coordination->height);
-            }
-        }
         if (configure_autopopup_window(window, keyIndex, &rect)) {
+            if (btncontext->state == BUTTON_STATE_PRESSED) {
+                btncontext->state = BUTTON_STATE_NORMAL;
+                CMCFWindows *windows = CMCFWindows::get_instance();
+                if (windows) {
+                    const McfLayoutKeyCoordination *coordination = cache->get_cur_layout_key_coordination(window, keyIndex);
+                    windows->update_window(window, coordination->x, coordination->y, coordination->width, coordination->height);
+                }
+            }
             /* Currently, window does not support virtual window */
             mcfwindow popup_window = windows->open_popup(window,
             		                                     keyIndex,
@@ -2296,20 +2302,12 @@ CMCFController::timer_event(const mcf32 data)
 				process_button_pressed_event(popup_window, x, y, min_dist_index, context->get_last_touch_device_id());
 			}
 
-            context->set_cur_pressed_window(context->get_last_touch_device_id(), popup_window);
-            context->set_cur_pressed_key(context->get_last_touch_device_id(), min_dist_index);
-            if(btncontext) {
-                btncontext->state = BUTTON_STATE_NORMAL;
-            }
-
             CMCFWindows *windows = CMCFWindows::get_instance();
             if (windows) {
                 windows->update_window(window, coordination->x, coordination->y, coordination->width, coordination->height);
             }
         }
         events->destroy_timer(id);
-        context->set_cur_pressed_window(context->get_last_touch_device_id(), MCFWINDOW_INVALID);
-        context->set_cur_pressed_key(context->get_last_touch_device_id(), NOT_USED);
         return FALSE;
     }
     break;
@@ -2691,7 +2689,11 @@ CMCFController::configure_autopopup_window(mcfwindow window, mcfbyte keyindex, M
             int scrwidth, scrheight;
             const McfLayout *layout = cache->get_cur_layout(windows->get_base_window());
             utils->get_screen_resolution(&scrwidth, &scrheight);
-
+            if (context->get_display() == MCFDISPLAY_LANDSCAPE) {
+                int  tmp = scrwidth;
+                scrwidth = scrheight;
+                scrheight = tmp;
+            }
             windows->get_window_rect(windows->get_base_window(), &baseWndRect);
             /* Let the autopopup have its position right above the pressed button, with center alignment) */
             rect->x = baseWndRect.x + coordination->x + (coordination->width / 2) - (rect->width / 2);

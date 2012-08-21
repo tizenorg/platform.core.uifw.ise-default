@@ -29,6 +29,7 @@ INST_ICONS	= 	\
 	textinput_icon_space_press.png \
 	textinput_panel_bg.png \
 	textinput_panel_dimming.png \
+	textinput_panel_land_bg.png \
 	textinput_popup_bg1.png \
 	textinput_popup_bg2.png \
 	textinput_popup_bg3.png \
@@ -51,10 +52,50 @@ INST_ICONS	= 	\
 	textinput_button_symbol_right_press.png \
 	04_textinput_symbol_arrow_left.png \
 	04_textinput_symbol_arrow_right.png \
-	04_textinput_bubble_umlaut_bg.png 
+	04_textinput_bubble_umlaut_bg.png \
+	B09_Qwerty_btn_01.png \
+	B09_Qwerty_btn_02.png \
+	B09_Qwerty_btn_press.png \
+	B09_Qwerty_l_btn_01.png \
+	B09_Qwerty_l_btn_02.png \
+	B09_Qwerty_l_btn_press.png \
+	B09_icon_back.png \
+	B09_icon_back_press.png \
+	B09_icon_enter_press.png \
+	B09_icon_enter.png \
+	B09_icon_enter_disabled.png \
+	B09_icon_shift1.png \
+	B09_icon_shift2.png \
+	B09_icon_shift3.png \
+	B09_icon_shift_press.png \
+	B09_icon_shift1_land.png \
+	B09_icon_shift2_land.png \
+	B09_icon_shift3_land.png\
+	B09_icon_shift_press_land.png \
+	B09_icon_space.png \
+	B09_icon_space_press.png \
+	B09_icon_back_50x50.png \
+	B09_icon_back_50x50_press.png \
+	B09_icon_language_port.png \
+	B09_icon_language_port_press.png \
+	B09_icon_language_land.png \
+	B09_icon_language_land_press.png \
+	B09_icon_arrow_up_press.png \
+	B09_icon_arrow_up.png \
+	B09_icon_arrow_right_press.png \
+	B09_icon_arrow_right.png \
+	B09_icon_arrow_left_press.png \
+	B09_icon_arrow_left.png \
+	B09_icon_arrow_down_press.png \
+	B09_icon_arrow_down.png \
+	B09_bg_Popup.png \
+	B09_bubble_bg.png \
+	B09_key_btn_01.png \
+	B09_key_btn_02.png \
+	B09_key_btn_press.png
 
 
 
-westernicondir			= @PREFIX_DIR@/share/isf/ise/ise-default/480x800/default/
+westernicondir			= @PREFIX_DIR@/share/isf/ise/ise-default/720x1280/default/
 westernicon_DATA		= $(INST_ICONS)
 

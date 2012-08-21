@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include "mcfevents-efl.h"
@@ -85,10 +84,36 @@ mcfboolean get_window_rect(const mcfwindow window, McfRectangle *rect)
         /* get window size */
         utils->get_screen_resolution(&scr_w, &scr_h);
         if(winctx) {
-            rect->x = winctx->x;
-            rect->y = winctx->y;
-            rect->width = winctx->width;
-            rect->height = winctx->height;
+            switch(context->get_rotation_degree()) {
+                case 90: {
+                        rect->height = winctx->width;
+                        rect->width = winctx->height;
+                        rect->y = scr_h - rect->height - winctx->x;
+                        rect->x = winctx->y;
+                    }
+                    break;
+                case 180: {
+                        rect->width = winctx->width;
+                        rect->height = winctx->height;
+                        rect->x = scr_w - winctx->x - rect->width;
+                        rect->y = scr_h - winctx->y - rect->height;
+                    }
+                    break;
+                case 270: {
+                        rect->height = winctx->width;
+                        rect->width = winctx->height;
+                        rect->y = winctx->x;
+                        rect->x= scr_w - winctx->y - rect->width;
+                    }
+                    break;
+                default: {
+                        rect->x = winctx->x;
+                        rect->y = winctx->y;
+                        rect->width = winctx->width;
+                        rect->height = winctx->height;
+                    }
+                    break;
+            }
             bRet = TRUE;
         } else {
             rect->x = rect->y = rect->width = rect->height = 0;
@@ -99,13 +124,33 @@ mcfboolean get_window_rect(const mcfwindow window, McfRectangle *rect)
 
 /**  Here x and y contains "actual" x and y position relative to portrait root window,
      and winctx->width,height contains the window's orientation dependant width and height */
-McfPoint get_rotated_local_coords(mcfint x, mcfint y, McfRectangle *rect)
+McfPoint get_rotated_local_coords(mcfint x, mcfint y, mcfint degree, McfRectangle *rect)
 {
     McfPoint ret = {0, 0};
 
     if(rect) {
-	    ret.x = x - rect->x;
-	    ret.y = y - rect->y;
+        switch(degree) {
+            case 90: {
+                    ret.x = (rect->y + rect->width) - y;
+                    ret.y = x - rect->x;
+                }
+                break;
+            case 180: {
+                    ret.x = (rect->x + rect->width) - x;
+                    ret.y = (rect->y + rect->height) - y;
+                }
+                break;
+            case 270: {
+                    ret.x = y - rect->y;
+                    ret.y = (rect->x + rect->height) - x;
+                }
+                break;
+            default: {
+                    ret.x = x - rect->x;
+                    ret.y = y - rect->y;
+                }
+                break;
+        }
     }
     return ret;
 }
@@ -178,7 +223,7 @@ Eina_Bool mouse_press(void *data, int type, void *event_info)
                     if(processEvt)
                     {
                         // Now convert the global coordination to appropriate local coordination
-                        McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+                        McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, context->get_rotation_degree(), &rect);
                         controller->mouse_press(window, coords.x, coords.y, ev->multi.device);
                         bMousePressed = TRUE;
                         processed = TRUE;
@@ -193,8 +238,14 @@ Eina_Bool mouse_press(void *data, int type, void *event_info)
         if (!processed) {
             window = pressedWindow;
             if(get_window_rect(window, &rect)) {
+                if(context->get_rotation_degree() == 90 || context->get_rotation_degree() == 270) {
+                    mcfint temp = rect.width;
+                    rect.width = rect.height;
+                    rect.height = temp;
+                }
+
                 // Now convert the global coordination to appropriate local coordination
-                McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+                McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, context->get_rotation_degree(), &rect);
                 controller->mouse_press(window, coords.x, coords.y, ev->multi.device);
                 bMousePressed = TRUE;
                 processed = TRUE;
@@ -260,7 +311,7 @@ Eina_Bool mouse_release (void *data, int type, void *event_info)
                         if(processEvt)
                         {
                             /* Now convert the global coordination to appropriate local coordination */
-                            McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+                            McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, context->get_rotation_degree(), &rect);
                             controller->mouse_release(window, coords.x, coords.y, ev->multi.device);
                             processed = TRUE;
                         }
@@ -274,8 +325,14 @@ Eina_Bool mouse_release (void *data, int type, void *event_info)
         if (!processed) {
             window = pressedWindow;
             if(get_window_rect(window, &rect)) {
+                if(context->get_rotation_degree() == 90 || context->get_rotation_degree() == 270) {
+                    mcfint temp = rect.width;
+                    rect.width = rect.height;
+                    rect.height = temp;
+                }
+
                 /* Now convert the global coordination to appropriate local coordination */
-                McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+                McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, context->get_rotation_degree(), &rect);
                 controller->mouse_release(window, coords.x, coords.y, ev->multi.device);
                 processed = TRUE;
             }
@@ -313,7 +370,7 @@ Eina_Bool mouse_move (void *data, int type, void *event_info)
                 rect.height = winwidth;
                 rect.width = winheight;
             }
-            McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+            McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, context->get_rotation_degree(), &rect);
 
             controller->mouse_move(context->get_cur_pressed_window(ev->multi.device), coords.x, coords.y, ev->multi.device);
             processed = TRUE;
@@ -355,7 +412,8 @@ Eina_Bool mouse_move (void *data, int type, void *event_info)
                         if(processEvt)
                         {
                             /* Now convert the global coordination to appropriate local coordination */
-                            McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+                            McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y,
+                            		                                   context->get_rotation_degree(), &rect);
 
                             controller->mouse_move(window, coords.x, coords.y, ev->multi.device);
                             processed = TRUE;
@@ -371,7 +429,7 @@ Eina_Bool mouse_move (void *data, int type, void *event_info)
             window = pressedWindow;
             if(get_window_rect(window, &rect)) {
                 /* Now convert the global coordination to appropriate local coordination */
-                McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, &rect);
+                McfPoint coords = get_rotated_local_coords(ev->root.x, ev->root.y, context->get_rotation_degree(), &rect);
                 controller->mouse_move(window, coords.x, coords.y, ev->multi.device);
                 processed = TRUE;
             }

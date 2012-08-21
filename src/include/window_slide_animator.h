@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include <Ecore_X.h>
@@ -46,7 +45,7 @@ public:
 	void			start_animation();
 	void			stop_animation();
 
-	static void		get_window_position(int width, int height, int *showx, int *showy, int *hidex, int *hidey);
+	static void		get_window_pos_by_rotation(int width, int height, int degree, int *showx, int *showy, int *hidex, int *hidey);
 
 protected:
 	static Eina_Bool timer_event(void *data);
@@ -81,9 +80,9 @@ public:
 
 	void			set_target_window(Evas_Object *window);
 
-	void			start_show_animation(int width, int height);
-	void			start_hide_animation(int width, int height);
-	void			finish_show_animation(int width, int height);
+	void			start_show_animation(int width, int height, int degree);
+	void			start_hide_animation(int width, int height, int degree);
+	void			finish_show_animation(int width, int height, int degree);
 
 	void			animation_timer_cb();
 

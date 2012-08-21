@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #define Uses_SCIM_UTILITY
@@ -42,7 +41,6 @@
 
 #include <vconf.h>
 #include <vconf-keys.h>
-#include <ui-gadget.h>
 
 #include "ise.h"
 #include "isedata.h"
@@ -62,8 +60,6 @@ SETTING_INFO _setup_info;
 std::vector < int >v_lang_list;
 #endif
 
-struct ui_gadget *ug = NULL;
-Evas_Object *ug_box = NULL;
 Evas_Object *box = NULL;
 
 ConfigPointer _scim_config;
@@ -82,12 +78,15 @@ static mcfu32 gIseLayout;
 static bool gFLayoutSetting = FALSE;
 static mcfu32 gLastIseLayout = -1;
 static mcfulong prevKeyEvent = NOT_USED;
+int gIseScreenDegree = 0;
+static int gIseScreenDegreeBackup;
 static Ecore_Timer *release_block_timer_id;
 int gExplicitLanguageSetting = NOT_USED;
 static ISEPrivateKeyBuffer gPrivateKeyBuffer[ISE_PRIVATE_KEY_BUFFER_SIZE];
 int gDisableKeyBuffer[MAX_KEY];
 static ISELastInputContext gLatestInputContext;
 static mcfboolean gFInputContextSet = FALSE;
+static bool gFDisplaySetting = FALSE;
 bool gFHiddenState = TRUE;
 bool gFEffectEnabled = TRUE;
 static int prevInputMode = NOT_USED;
@@ -141,7 +140,7 @@ static void ise_forward_key_event(mcfulong keyEvent);
 static void _set_prediction_private_key();
 static void _set_shift_private_key();
 
-static void ise_set_screen_position();
+static void ise_set_screen_rotation(int degree);
 
 static void write_config(void)
 {
@@ -194,6 +193,12 @@ static void _ise_get_size(struct rectinfo &info)
 		mcfint win_w, win_h;
 		if (gCore) {
 			gCore->get_screen_resolution(&win_w, &win_h);
+		}
+
+		if (gIseScreenDegree == 90 || gIseScreenDegree == 270) {
+			Evas_Coord temp = win_w;
+			win_w = win_h;
+			win_h = temp;
 		}
 
 		info.pos_x = (win_w - width) / 2;
@@ -438,29 +443,30 @@ void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType ke
 		send_flush();
 		if (gCore->get_debug_mode() != DEBUGMODE_AUTOTEST) {
 			_setup_info.current_language = g_currentLanguage;
-			_show_option_window_ise(main_window, _setup_info, setting_window_cb);
+			_show_option_window_ise(main_window, gIseScreenDegree,
+						_setup_info, setting_window_cb);
 		}
 		break;
 	case UD_MVK_LANG_CHANGE:
-                if(_setup_info.lang_count == 1)
-                  _show_option_window_ise(main_window, _setup_info, setting_window_cb);
-                else if(_setup_info.lang_count == 2) {
-                  send_flush();
-                  do {
-                        count++;
-                        current_index++;
-                        if (current_index >= MAX_LANG_NUM) {
-                                /*IseLangDataSelectState[0] = true;*/
-                                current_index = 0;
-                        }
-                  } while((!IseLangDataSelectState[current_index]) && (count < MAX_LANG_NUM));
+				if(_setup_info.lang_count == 1)
+					_show_option_window_ise(main_window, gIseScreenDegree, _setup_info, setting_window_cb);
+				else if(_setup_info.lang_count == 2) {
+					send_flush();
+					do {
+						count++;
+						current_index++;
+						if (current_index >= MAX_LANG_NUM) {
+							/*IseLangDataSelectState[0] = true;*/
+							current_index = 0;
+						}
+					} while((!IseLangDataSelectState[current_index]) && (count < MAX_LANG_NUM));
 
-                  if(current_index != g_currentLanguage) {
-                    ise_set_language(current_index);
-                    g_currentLanguage = current_index;
-		  }
-                }
-                helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_LANGUAGE_EVENT, 0);
+					if(current_index != g_currentLanguage) {
+						ise_set_language(current_index);
+						g_currentLanguage = current_index;
+					}
+				}
+				helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_LANGUAGE_EVENT, 0);
 		break;
 	case UD_MVK_123:
 		send_flush();
@@ -548,7 +554,7 @@ void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType ke
 	if (bShowCloseWindow) {
 		int width, height;
 		gCore->get_window_size(&width, &height);
-		decorator.finish_show_animation(width, height);
+		decorator.finish_show_animation(width, height, gIseScreenDegree);
 	}
 
 	ise_update_cursor_position(g_cursor_position);
@@ -587,7 +593,8 @@ void _on_process_user_defined_keys(mcfchar * keyValue, mcfulong keyEvent,
 		send_flush();
 		if (gCore->get_debug_mode() != DEBUGMODE_AUTOTEST) {
 			_setup_info.current_language = g_currentLanguage;
-			_show_option_window_ise(main_window, _setup_info, setting_window_cb);
+			_show_option_window_ise(main_window, gIseScreenDegree,
+							_setup_info, setting_window_cb);
 		}
 		break;
 	case UD_MVK_SHIFT:
@@ -795,11 +802,12 @@ void render_flush_post_cb(void *data, Evas * e, void *event_info)
 	gCore->get_window_size(&width, &height);
 
 	if (gFEffectEnabled) {
-		decorator.start_show_animation(width, height);
+		decorator.start_show_animation(width, height, gIseScreenDegree);
 	} else {
 		int posx, posy;
 
-		CWindowSlideAnimator::get_window_position(width, height,
+		CWindowSlideAnimator::get_window_pos_by_rotation(width, height,
+													gIseScreenDegree,
 													&posx, &posy,
 													NULL, NULL);
 		evas_object_move(main_window, posx, posy);
@@ -817,6 +825,7 @@ void render_flush_post_cb(void *data, Evas * e, void *event_info)
 
 void ise_show(int ic)
 {
+	mcfboolean bRotated = FALSE;
 	mcfboolean bShouldUpdate = FALSE;
 
 	mcfint width = -1;
@@ -848,11 +857,19 @@ void ise_show(int ic)
 
 	gCore->set_update_pending(TRUE);
 
+	if (gIseScreenDegreeBackup != gIseScreenDegree) {
+		_send_keypad_geom_atom_info(main_window, KEYPAD_STATE_OFF);
+		evas_object_move(main_window, -10000, -10000);
+		ise_set_screen_rotation(gIseScreenDegree);
+		gFDisplaySetting = FALSE;
+		bRotated = TRUE;
+	}
+
 	if (ic != gPrevInputContext || gFLayoutChanged || !gFInputContextSet
-		|| (g_currentLanguage != gExplicitLanguageSetting
+		|| bRotated || (g_currentLanguage != gExplicitLanguageSetting
 		&& gExplicitLanguageSetting != NOT_USED)) {
-			set_single_commit(IseDefaultValue[gIseLayout].SingleCommit);
-			change_inputmode(IseDefaultValue[gIseLayout].InputMode);
+		set_single_commit(IseDefaultValue[gIseLayout].SingleCommit);
+		change_inputmode(IseDefaultValue[gIseLayout].InputMode);
 
 		if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
 			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
@@ -864,7 +881,8 @@ void ise_show(int ic)
 			mcfInputMode = IseDefaultValue[gIseLayout].mcfInputMode;
 		}
 
-		if (gFKeypadMode) {
+		if (gFKeypadMode && gIseScreenDegree != 90
+				&& gIseScreenDegree != 270) {
 				newInputMode = IseDefaultInputModes[mcfInputMode][0];
 		} else {
 				newInputMode = IseDefaultInputModes[mcfInputMode][1];
@@ -876,7 +894,8 @@ void ise_show(int ic)
 			g_currentLanguage = langID;
 			IseLangDataSelectState[g_currentLanguage] = true;
 			change_ldb_option(internalLangToLang[langID]);
-			change_keypad((uint32)IseKeypadMode[mcfInputMode][1]);
+			change_keypad((uint32)IseKeypadMode[mcfInputMode]
+						[(gCore->get_display_mode() == MCFDISPLAY_LANDSCAPE) ? 1 : 0]);
 
 			if (ic != gPrevInputContext) {
 				change_completion_option(IseInitialCompletionMode[mcfInputMode][get_Ise_default_context().OnOff]);
@@ -900,7 +919,7 @@ void ise_show(int ic)
 
 		if (get_Ise_default_context().Language != language
 			&& language != NOT_USED) {
-				change_ldb_option(language);
+			change_ldb_option(language);
 		}
 
 		if (TRUE &&
@@ -914,7 +933,7 @@ void ise_show(int ic)
 			gCore->get_input_mode() != INPUT_MODE_4X4_IPv6_123 &&
 #endif
 			TRUE) {
-				_set_prediction_private_key();
+			_set_prediction_private_key();
 		}
 
 		if(gExternalShiftLockMode) {
@@ -961,20 +980,21 @@ void ise_show(int ic)
 	}
 
 	/* Postpone window showing until first frame has been fully flushed */
-	if (1) {
+	if (!bRotated) {
 		gCore->get_window_size(&width, &height);
 
 		if (gFEffectEnabled) {
 			if (gFHiddenState || prevDispModeBackup != gCore->get_display_mode()) {
-				decorator.start_show_animation(width, height);
+				decorator.start_show_animation(width, height, gIseScreenDegree);
 			} else {
-				decorator.finish_show_animation(width, height);
+				decorator.finish_show_animation(width, height, gIseScreenDegree);
 			}
 		} else {
 			int posx, posy;
 
-			CWindowSlideAnimator::get_window_position(width,
+			CWindowSlideAnimator::get_window_pos_by_rotation(width,
 														height,
+														gIseScreenDegree,
 														&posx,
 														&posy,
 														NULL,
@@ -1001,6 +1021,7 @@ void ise_show(int ic)
 	gPrevInputContext = ic;
 	gFInputContextSet = TRUE;
 	gFHiddenState = FALSE;
+	gIseScreenDegreeBackup = gIseScreenDegree;
 
 	gPrevModifier = KEY_MODIFIER_NONE;
 
@@ -1008,9 +1029,28 @@ void ise_show(int ic)
 }
 
 /**
-* Sets screen position
+* Saves screen direction
 */
-static void ise_set_screen_position()
+void ise_set_screen_direction(int degree)
+{
+	if (degree == 0 || degree == 90 || degree == 180 || degree == 270) {
+		if (gIseScreenDegree == degree)
+			return;
+		if (gCore == NULL)
+			ise_new();
+		mcf_assert_return(gCore);
+		gIseScreenDegree = degree;
+		gFDisplaySetting = TRUE;
+#ifdef HAVE_CONFORMANT_AUTOSCROLL
+		g_virt_keybd_state = KEYPAD_STATE_UNKNOWN;
+#endif
+	}
+}
+
+/**
+* Sets screen rotation
+*/
+static void ise_set_screen_rotation(int degree)
 {
 	mcfint width = -1;
 	mcfint height = -1;
@@ -1019,13 +1059,17 @@ static void ise_set_screen_position()
 		ise_new();
 	mcf_assert_return(gCore);
 
+	gCore->set_display_mode(degree);
 	gCore->get_window_size(&width, &height);
 	evas_object_resize(main_window, width, height);
 }
 
 void ise_hide(bool fCallHided)
 {
-
+	CMCFWindows *windows = CMCFWindows::get_instance();
+	if(windows) {
+		windows->destroy_context_popup();
+	}
 	if (gCore) {
 		gCore->hide();
 		gCore->disable_input_events(TRUE);
@@ -1043,7 +1087,7 @@ void ise_hide(bool fCallHided)
 										ECORE_IMF_INPUT_PANEL_STATE_HIDE);
 		DBG("-=-=-= update_input_context :\
 			ECORE_IMF_INPUT_PANEL_STATE_HIDE\n");
-		decorator.start_hide_animation(width, height);
+		decorator.start_hide_animation(width, height, gIseScreenDegreeBackup);
 	} else {
 		if (main_window)
 			evas_object_move(main_window, -10000, -10000);
@@ -1116,19 +1160,6 @@ void ise_set_language(unsigned int language)
 	helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_LANGUAGE_EVENT, 0);
 }
 
-static void get_screen_size(int &width, int &height)
-{
-	Display *d = (Display *) ecore_x_display_get();
-	if (d == NULL) {
-		DBG("ecore_x_display_get () is failed!!!\n");;
-		return;
-	}
-	int screen_num = DefaultScreen(d);
-	width = DisplayWidth(d, screen_num);
-	height = DisplayHeight(d, screen_num);
-	DBG("\n\n width=%d   height=%d \n\n", width, height);
-}
-
 static void _dismissed_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	evas_object_del(obj);
@@ -1149,7 +1180,6 @@ static void _ctxpopup_cb(void *data, Evas_Object *obj, void *event_info)
 
 void _show_language_popup(mcfshort x, mcfshort y) {
 	CMCFWindows *windows = CMCFWindows::get_instance();
-	int width,height;
 	Evas_Object* win = windows->get_context_popup();
 	ctxspopup = elm_ctxpopup_add(win);
 	elm_object_scroll_freeze_push(ctxspopup);
@@ -1165,11 +1195,10 @@ void _show_language_popup(mcfshort x, mcfshort y) {
 			elm_ctxpopup_item_append(ctxspopup,IseLangData[1][loop].displayname, NULL, _ctxpopup_cb, (void*)loop);
 		}
 	}
-       get_screen_size(width,height);
-       evas_object_size_hint_max_set(ctxspopup, height, width/2);
-       evas_object_move(ctxspopup,x,y);
-       evas_object_show(win);
-       evas_object_show(ctxspopup);
+	evas_object_size_hint_max_set(ctxspopup, 800, 230);
+	evas_object_move(ctxspopup,x,y);
+	evas_object_show(win);
+	evas_object_show(ctxspopup);
 }
 
 void ise_set_lang_to_vconf(unsigned int language)
@@ -1296,6 +1325,7 @@ void ise_reset_context()
 	memset(gPrivateKeyBuffer, 0x00, sizeof(gPrivateKeyBuffer));
 	gIseLayout = ISE_LAYOUT_STYLE_NORMAL;
 	ise_set_layout(gIseLayout);
+	ise_set_screen_direction(0);
 
 	for (loop = 0; loop < MAX_KEY; loop++) {
 		gDisableKeyBuffer[loop] = NOT_USED;
@@ -1560,6 +1590,11 @@ void ise_get_size(int *x, int *y, int *width, int *height)
 			gCore->get_window_size(width, height);
 			gCore->get_screen_resolution(&win_w, &win_h);
 
+			if (gCore->get_display_mode() == MCFDISPLAY_LANDSCAPE) {
+				mcfint temp = win_w;
+				win_w = win_h;
+				win_h = temp;
+			}
 			*x = (win_w - *width) / 2;
 			if (gFHiddenState) {
 				*y = win_h;

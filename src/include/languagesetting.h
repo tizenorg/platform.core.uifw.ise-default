@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include "ise.h"
@@ -39,6 +38,11 @@ MCF_BEGIN_DECLS
 
 #define LANGUAGE	dgettext(GETTEXT_PACKAGE, "IDS_IME_BODY_KEYBOARD_LANGUAGES")	//gettext("IDS_IME_BODY_KEYBOARD_LANGUAGES")
 #define OPTIONS		dgettext(GETTEXT_PACKAGE, "IDS_IME_BODY_KEYBOARD_SETTINGS")	//gettext("IDS_IME_BODY_KEYBOARD_SETTINGS")
+
+#define PORTRAIT_DEGREE_0	0
+#define PORTRAIT_DEGREE_180	180
+#define LANDSCAPE_DEGREE_270	270
+#define LANDSCAPE_DEGREE_90	90
 
 #define BASE_THEME_WIDTH 720.0f
 #define BASE_THEME_HEIGHT 1280.0f
@@ -86,23 +90,25 @@ Evas_Object *create_setup_genlist (Evas_Object *layout_main, Evas_Object *navi_b
 /**
  * Shows the options window when options key is pressed in setting menu.
 	@param[in] parentWidget 	 Mainwindow refernce
+	@param[in] degree 	 Rotation angle
 	@return 				Nothing.
  *
  **/
 void
-_show_option_window(Evas_Object * parentWidget);
+_show_option_window(Evas_Object * parentWidget, mcfint degree);
 
 
 /**
  * Shows the options window when options key is pressed in keypad.
 	@param[in] parentWidget 	 Mainwindow refernce
+	@param[in] degree 	 Rotation angle
 	@param[in] info 	 	 Setting options
 	@param[in] callback      Keyboard setting callback
 	@return 				Nothing.
  *
  **/
 void
-_show_option_window_ise(Evas_Object *parentWidget, SETTING_INFO info, void mainback(SETTING_INFO currentInfo));
+_show_option_window_ise(Evas_Object *parentWidget, mcfint degree, SETTING_INFO info, void mainback(SETTING_INFO currentInfo));
 
 
 /**

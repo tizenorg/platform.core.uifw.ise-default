@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #define Uses_SCIM_UTILITY
@@ -65,8 +64,6 @@ static void run(const String &display);
 
 static int main_window_xpos = 0;
 static int main_window_ypos = 0;
-static int screen_width;
-static int screen_height;
 
 static int candidate_height = 79;
 static int ise_height = 410;
@@ -76,6 +73,7 @@ extern Evas_Object *main_window;
 extern HelperAgent helper_agent;
 extern unsigned int gExplicitLanguageSetting;
 extern bool gFHiddenState;
+extern int gIseScreenDegree;
 static int gLastIC = 0;
 extern bool IseLangDataSelectState[MAX_LANG_NUM];
 
@@ -295,7 +293,7 @@ static void slot_ise_show(const HelperAgent *, int ic, char *buf, size_t &len)
 
 		ise_reset_context();	/* reset ISE*/
 
-		ise_explicitly_set_language(iseContext.language);
+		ise_set_screen_direction(get_root_window_degree());
 
 		ise_set_layout(iseContext.layout);
 
@@ -319,9 +317,7 @@ static void slot_ise_hide(const HelperAgent *, int ic, const String &uuid)
 {
 	DBG("%s\n", __func__);
 	CMCFWindows *windows = CMCFWindows::get_instance();
-	Evas_Object* win = windows->get_context_popup();
-	if(win == NULL)
-	  ise_hide(TRUE);
+	ise_hide(TRUE);
 }
 
 static void slot_get_size(const HelperAgent *, struct rectinfo &info)
@@ -485,6 +481,7 @@ static void slot_reset_ise_input_context(const HelperAgent *, int ic,
 static void slot_set_screen_direction(const HelperAgent *, uint32 &mode)
 {
 	std::cout << "<now> slot_set_screen_direction" << mode << " \n";
+	ise_set_screen_direction(mode);
 	return;
 }
 
@@ -550,20 +547,6 @@ static Eina_Bool helper_agent_input_handler(void *data,
 	}
 
 	return ECORE_CALLBACK_RENEW;
-}
-
-static void get_screen_size(int &width, int &height)
-{
-	Display *d = (Display *) ecore_x_display_get();
-	if (d == NULL) {
-		DBG("ecore_x_display_get () is failed!!!\n");;
-		return;
-	}
-
-	int screen_num = DefaultScreen(d);
-	width = DisplayWidth(d, screen_num);
-	height = DisplayHeight(d, screen_num);
-	DBG("\n\n width=%d   height=%d \n\n", width, height);
 }
 
 static void slot_reload_config_callback(const HelperAgent *, int ic,
@@ -640,6 +623,7 @@ static Eina_Bool _client_message_cb(void *data, int type, void *event)
 			Ecore_X_Window activeWin = ev->data.l[1];
 			if (activeWin ==
 				ecore_x_icccm_transient_for_get(elm_win_xwindow_get(main_window))) {
+				ise_set_screen_direction(angle);
 				ise_show(gLastIC);
 			}
 		}
@@ -681,7 +665,6 @@ void run(const String &display)
 	ise_new();
 	PERF_TEST_MID("\tinit()");
 
-	get_screen_size(screen_width, screen_height);
 	isf_setting_language_changed_cb(NULL, NULL);
 
 	slp_fd = heynoti_init();

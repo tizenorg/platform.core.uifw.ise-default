@@ -1,19 +1,18 @@
 /*
  * Copyright 2012  Samsung Electronics Co., Ltd
  *
- * Licensed under the Flora License, Version 1.0 (the License);
+ * Licensed under the Flora License, Version 1.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.tizenopensource.org/license
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an AS IS BASIS,
+ * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 
 
 #include "mcftypes.h"
@@ -33,9 +32,7 @@
 #define PORTRAIT_DEFAULT_BG_IMG "textinput_panel_bg.png"
 #define LANDSCAPE_DEFAULT_BG_IMG "textinput_panel_land_bg.png"
 
-#define POPUP_BG_IMG_1 "textinput_popup_bg1.png"
-#define POPUP_BG_IMG_2 "textinput_popup_bg2.png"
-#define POPUP_BG_IMG_3 "textinput_popup_bg3.png"
+#define POPUP_BG_IMG "B09_bg_Popup.png"
 
 #define RESOURCE_DATA_LABEL_LEN 10
 #define RESOURCE_DATA_IMG_PATH_LEN 50
@@ -222,7 +219,6 @@ typedef enum _MCFLabelProperties {
 	LABEL_PROPERTIES_LAND_DEFAULT_TYPE,
 	LABEL_PROPERTIES_LAND_DEFAULT_IMAGE_TYPE,
 	LABEL_PROPERTIES_LAND_MODE_CHANGE_LABEL_TYPE,
-	LABEL_PROPERTIES_LAND_SINHALA_TYPE,
 	LABEL_PROPERTIES_LAND_SYMBOL_LABEL_TYPE,
 	LABEL_PROPERTIES_LAND_WWW_TYPE,
 	LABEL_PROPERTIES_4X4_INDIC_TYPE,
@@ -232,6 +228,8 @@ typedef enum _MCFLabelProperties {
 
 	LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
 	LABEL_PROPERTIES_QTY_SPACE_KEY_TYPE,
+	LABEL_PROPERTIES_QTY_DOT_BUTTON_TYPE,
+	LABEL_PROPERTIES_QTY_NUM_DEFAULT_TYPE,
 
 	MAX_LABEL_PROPERTIES
 }MCFLabelProperties;
@@ -250,9 +248,9 @@ typedef enum _MCFLabelProperties {
 #define COLOR_SPACE { 255, 255, 255, 255}
 
 #define COLOR_LABEL_PRESSED { 120, 120, 120, 255 }
-#define COLOR_LABEL_DISABLED { 88, 88, 88, 255 }
+#define COLOR_LABEL_DISABLED { 96, 96, 96, 255 }
 
-#define COLOR_NORMAL {255,255,255,255}
+#define COLOR_NORMAL {40,40,40,255}
 #define COLOR_NORMAL_LONGKEY {150,150,150,255}
 #define COLOR_SHIFT_STATE_COLOR {255,180,0,255}
 #define COLOR_FUNCTION { 255, 255, 255, 255}
@@ -260,8 +258,8 @@ typedef enum _MCFLabelProperties {
 #define COLOR_DISABLED { 178, 178, 178, 255 }
 
 static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZE_OF_LABEL_FOR_ONE] = {
-    /* fValid, fontName, fontSize, normalColor, activeColor, selectedColor, alignment, padding, shadowDistance, shadowDirection, shadowColor  */
-    /* LABEL_PROPERTIES_4X4_DEFAULT_TYPE */
+	/* fValid, fontName, fontSize, normalColor, activeColor, selectedColor, alignment, padding, shadowDistance, shadowDirection, shadowColor  */
+	/* LABEL_PROPERTIES_4X4_DEFAULT_TYPE */
 	{
 	{USED, DEFAULT_FONT_NAME, 30,
 		{
@@ -331,14 +329,14 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 	},
 	/* LABEL_PROPERTIES_QTY_DEFAULT_TYPE */
 	{
-	{USED, DEFAULT_FONT_NAME, 36,
+	{USED, DEFAULT_FONT_NAME, 42,
 		{
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 		},
 		LABEL_ALIGN_CENTER_MIDDLE, 0},
-	{USED, DEFAULT_FONT_NAME, 17,
+	{USED, DEFAULT_FONT_NAME, 23,
 		{
 			{COLOR_NORMAL_LONGKEY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_NORMAL_LONGKEY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
@@ -371,12 +369,12 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 	},
 	/* LABEL_PROPERTIES_QTY_BOTTOM_LINE_IMAGE_TYPE */
 	{
-		{USED, DEFAULT_FONT_NAME, 15,
+		{USED, DEFAULT_FONT_NAME, 22,
 		{
-			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-		},LABEL_ALIGN_RIGHT_TOP, 5, 5},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+		},LABEL_ALIGN_CENTER_BOTTOM, 10, 6},
 		{FALSE},
 	},
 	/* LABEL_PROPERTIES_TEXTMODE_POPUP_TYPE */
@@ -413,7 +411,7 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 	},
 	/* LABEL_PROPERTIES_QTY_WWW_TYPE */
 	{
-	{USED, DEFAULT_FONT_NAME, 15,
+	{USED, DEFAULT_FONT_NAME, 32,
 		{
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
@@ -445,13 +443,13 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 
 	/*LABEL_PROPERTIES_LAND_DEFAULT_TYPE*/
 	{
-	{USED, DEFAULT_FONT_NAME, 35,
+	{USED, DEFAULT_FONT_NAME, 42,
 		{
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 		}, LABEL_ALIGN_CENTER_MIDDLE, 0},
-	{USED, DEFAULT_FONT_NAME, 17,
+	{USED, DEFAULT_FONT_NAME, 23,
 		{
 			{COLOR_LIGHTGRAY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_LIGHTGRAY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
@@ -463,12 +461,12 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 
 	/*LABEL_PROPERTIES_LAND_DEFAULT_IMAGE_TYPE*/
 	{
-	{USED, DEFAULT_FONT_NAME, 20,
+	{USED, DEFAULT_FONT_NAME, 26,
 		{
-			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-		},LABEL_ALIGN_RIGHT_TOP, 5, 5},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+		},LABEL_ALIGN_RIGHT_MIDDLE, 20, 10},
 	{FALSE},
 	},
 
@@ -480,23 +478,6 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
 		}, LABEL_ALIGN_CENTER_MIDDLE, 0},
-	{FALSE},
-	},
-
-	/*LABEL_PROPERTIES_LAND_SINHALA_TYPE*/
-	{
-	{USED, DEFAULT_FONT_NAME, 35,
-		{
-			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-		}, LABEL_ALIGN_CENTER_MIDDLE, 0, 7},
-	{USED, DEFAULT_FONT_NAME, 24,
-		{
-			{COLOR_LIGHTGRAY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_LIGHTGRAY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_LIGHTGRAY, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-		},LABEL_ALIGN_CENTER_TOP, 0, 0},
 	{FALSE},
 	},
 
@@ -585,12 +566,12 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 	},
 	/* LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE*/
 	{
-	{USED, DEFAULT_FONT_NAME, 36,
+	{USED, DEFAULT_FONT_NAME, 48,
 		{
-			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
-		}, LABEL_ALIGN_CENTER_BOTTOM, 0, 12},
+			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_242, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+		}, LABEL_ALIGN_CENTER_MIDDLE, 0},
 	{FALSE},
 	},
 	/* LABEL_PROPERTIES_QTY_SPACE_KEY_TYPE */
@@ -616,6 +597,28 @@ static McfLabelProperties mcf_key_label_properties[MAX_LABEL_PROPERTIES][MAX_SIZ
 			{COLOR_SPACE, COLOR_PRESSED, COLOR_DISABLED},
 		},
 	LABEL_ALIGN_RIGHT_TOP, 9, 0},
+	{FALSE},
+	},
+	/* LABEL_PROPERTIES_QTY_DOT_BUTTON_TYPE */
+	{
+	{USED, DEFAULT_FONT_NAME, 56,
+		{
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+		},
+	LABEL_ALIGN_CENTER_BOTTOM, 0, 9},
+	{FALSE},
+	},
+	/* LABEL_PROPERTIES_QTY_NUM_DEFAULT_TYPE */
+	{
+	{USED, DEFAULT_FONT_NAME, 30,
+		{
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+			{COLOR_NORMAL, COLOR_PRESSED, COLOR_LABEL_DISABLED},
+		},
+	LABEL_ALIGN_CENTER_MIDDLE, 0},
 	{FALSE},
 	},
 };
@@ -891,7 +894,7 @@ const McfDefaultConfigure mcf_default_configure = {
 	FALSE,
 	SW_BTN_STYLE_A,
 	{TOUCH_OFFSET_LEVEL_1,TOUCH_OFFSET_LEVEL_2},
-	{{0, 0},{0, 0}}
+	{{0, -20},{0, -15}}
 };
 
 static McfLabelProperties CAND_LABEL_PROP = {
@@ -946,6 +949,17 @@ static const McfNinePatchInfo mcf_nine_patch_info[] = {
 	{"textinput_land_button_capslock_press.png", 3, 3, 3, 3},
 	{"textinput_land_button_press_drag.png", 3, 3, 3, 3},
 	{"textinput_land_button_press_drag_back.png", 3, 3, 3, 3},
+	{"B09_bg_Popup.png", 13, 13, 9, 9},
+	{"B09_bubble_bg.png", 7, 7, 9, 9},
+	{"B09_key_btn_01.png", 8, 8, 0, 0},
+	{"B09_key_btn_02.png",  8, 8, 0, 0},
+	{"B09_key_btn_press.png",  8, 8, 0, 0},
+	{"B09_Qwerty_btn_01.png", 8, 8, 0, 0},
+	{"B09_Qwerty_btn_02.png", 8, 8, 0, 0},
+	{"B09_Qwerty_btn_press.png", 8, 8, 0, 0},
+	{"B09_Qwerty_l_btn_01.png", 8, 8, 0, 0},
+	{"B09_Qwerty_l_btn_02.png", 8, 8, 0, 0},
+	{"B09_Qwerty_l_btn_press.png", 8, 8, 0, 0},
 };
 
 typedef enum _MCFModifierDecoration {
