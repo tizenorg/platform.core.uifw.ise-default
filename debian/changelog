@@ -1,3 +1,11 @@
+ise-default (0.3.007-1) unstable; urgency=low
+
+  * Change Keyboard setting close by focus-out instead of Home key
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.007-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 23 Aug 2012 14:13:41 +0530
+
 ise-default (0.3.006-1) unstable; urgency=low
 
   * Keyboard settings Blank screen issue fixed

@@ -135,7 +135,6 @@ static void _show_language_selection_view(Evas_Object *window);
 static void list_selected(void *data, Evas_Object *obj, void *event_info);
 static void set_the_selected_language(Evas_Object *obj);
 static void softkey_clicked	(void *data, Evas_Object *obj, void *event_info);
-static Eina_Bool _ise_keydown_exit_cb(void *data, int type, void *event);
 static void _lang_cancel_cb(void *data, Evas_Object *obj, void *event_info);
 static void _lang_set_cb(void *data, Evas_Object *obj, void *event_info);
 static void _option_cancel_cb(void *data, Evas_Object *obj, void *event_info);
@@ -504,11 +503,6 @@ void clean_up()
 		ad.openedViaGadget = FALSE;
 	}
 
-	if (ad.parent) {
-		evas_object_show(ad.parent);
-		evas_object_raise(ad.parent);
-	}
-
 	if (evtHandler)
 		ecore_event_handler_del(evtHandler);
 	evtHandler = NULL;
@@ -523,6 +517,15 @@ void clean_up()
 		sf_disconnect(sensor_handle);
 		sensor_handle = -1;
 	}
+}
+
+static Eina_Bool
+_ise_focus_out_cb(void *data, int type, void *event)
+{
+	set_the_selected_language(NULL);
+	clean_up();
+
+	return ECORE_CALLBACK_CANCEL;
 }
 
 static void list_selected(void *data, Evas_Object *obj, void *event_info)
@@ -796,20 +799,6 @@ static void option_list_clicked(void *data, Evas_Object *obj, void *event_info)
 		_show_language_selection_view(ad.naviframe);
 }
 
-static Eina_Bool _ise_keydown_exit_cb(void *data, int type, void *event)
-{
-	Ecore_Event_Key *hard_key = (Ecore_Event_Key *) event;
-
-	if (hard_key) {
-		if (strcmp(hard_key->keyname, "XF86Phone") == 0
-		    || strcmp(hard_key->keyname, "XF86Stop") == 0) {
-			set_the_selected_language(NULL);
-			clean_up();
-		}
-	}
-	return ECORE_CALLBACK_CANCEL;
-}
-
 static void _option_cancel_cb(void *data, Evas_Object *obj, void *event_info)
 {
 	clean_up();
@@ -961,9 +950,9 @@ _show_option_window_ise(Evas_Object *parentWidget, mcfint degree,
 	elm_naviframe_item_push(ad.naviframe, OPTIONS, cancel_btn, NULL, option_list, NULL);
 	elm_object_style_set(cancel_btn, "naviframe/back_btn/default");
 
-	/*For center hard key */
+	/*For focus-out */
 	evtHandler =
-	    ecore_event_handler_add(ECORE_EVENT_KEY_DOWN, _ise_keydown_exit_cb,
+	    ecore_event_handler_add(ECORE_X_EVENT_WINDOW_FOCUS_OUT, _ise_focus_out_cb,
 				    NULL);
 
 	/* This is necessary to update keyboard options when
