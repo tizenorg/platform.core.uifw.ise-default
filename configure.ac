@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(ise-default, 0.3.002, dalton.lee@samsung.com)
+AC_INIT(ise-default, 0.3.008, dalton.lee@samsung.com)
 AC_CONFIG_SRCDIR([src/ise.cpp])
 
 ELM_VERSION=0.0.1
@@ -34,7 +34,7 @@ AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER([config.h])
 
 # Init gettext
-ALL_LINGUAS="ko_KR en zh_CN zh_HK zh_TW de_DE nl_NL es_ES pt_PT el_GR it_IT fr_FR tr_TR ja_JP ru_RU"
+ALL_LINGUAS="ar az bg ca cs da de_DE el_GR en en_PH en_US es_ES es_US et eu fi fr_CA fr_FR ga gl hi hr hu hy is it_IT ja_JP ka kk ko_KR lt lv mk nl_NL pl pt_BR pt_PT ro ru_RU sk sl sr sv tr_TR uk zh_CN zh_HK zh_SG zh_TW"
 AM_GNU_GETTEXT
 
 AC_LIBTOOL_WIN32_DLL

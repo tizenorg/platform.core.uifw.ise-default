@@ -1,5 +1,5 @@
 msgid "IDS_IME_BODY_WRITING_LANGUAGES"
-msgstr "Yazma dilleri"
+msgstr "წერის ენები"
 
 msgid "IDS_IME_OPT_LANG_DUTCH"
 msgstr "Nederlands"
@@ -32,9 +32,9 @@ msgid "IDS_IME_POP_LANG_PORTUGUESE"
 msgstr "Português"
 
 msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
-msgstr "Klavye ayarlarında en az bir dil seçmelisiniz"
+msgstr "კლავიატურის პარამეტრებში უნდა აირჩიოთ ერთი ენა მაინც"
 
 msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
-msgstr "Klavye ayarları"
+msgstr "კლავიატურის პარამეტრები"
 
 

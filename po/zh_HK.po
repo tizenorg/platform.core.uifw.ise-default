@@ -1,3 +1,6 @@
+msgid "IDS_IME_BODY_WRITING_LANGUAGES"
+msgstr "編寫語言"
+
 msgid "IDS_IME_OPT_LANG_DUTCH"
 msgstr "Nederlands"
 
@@ -31,15 +34,7 @@ msgstr "Português"
 msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
 msgstr "您必須於鍵盤設定中選擇至少一種語言"
 
-msgid "IDS_IME_BODY_HARDWARE_KEYBOARD"
-msgstr "硬體鍵盤"
-
-msgid "IDS_IME_BODY_KEYBOARD_LANGUAGES"
-msgstr "鍵盤語言"
-
 msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
 msgstr "鍵盤設定"
 
-msgid "IDS_IME_BODY_SOFTWARE_KEYBOARD"
-msgstr "虛擬鍵盤"
 

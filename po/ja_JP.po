@@ -1,3 +1,6 @@
+msgid "IDS_IME_BODY_WRITING_LANGUAGES"
+msgstr "入力言語"
+
 msgid "IDS_IME_OPT_LANG_DUTCH"
 msgstr "Nederlands"
 
@@ -31,15 +34,7 @@ msgstr "Português"
 msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
 msgstr "キーボード設定では、少なくとも1言語を選択する必要があります。"
 
-msgid "IDS_IME_BODY_HARDWARE_KEYBOARD"
-msgstr "ハードウェアキーボード"
-
-msgid "IDS_IME_BODY_KEYBOARD_LANGUAGES"
-msgstr "キーボード言語"
-
 msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
 msgstr "キーボード​設定"
 
-msgid "IDS_IME_BODY_SOFTWARE_KEYBOARD"
-msgstr "ソフトウェアキーボード"
 

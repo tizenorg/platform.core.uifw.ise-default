@@ -1,3 +1,6 @@
+msgid "IDS_IME_BODY_WRITING_LANGUAGES"
+msgstr "Γλώσσες γραφής"
+
 msgid "IDS_IME_OPT_LANG_DUTCH"
 msgstr "Nederlands"
 
@@ -31,15 +34,7 @@ msgstr "Português"
 msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
 msgstr "Πρέπει να κάνετε τουλάχιστον μία γλώσσα στις ρυθμίσεις πληκτρολογίου"
 
-msgid "IDS_IME_BODY_HARDWARE_KEYBOARD"
-msgstr "Πληκτρολόγιο υλικού"
-
-msgid "IDS_IME_BODY_KEYBOARD_LANGUAGES"
-msgstr "Γλώσσες πληκτρολογίου"
-
 msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
 msgstr "Ρυθμίσεις πληκτρολογίου"
 
-msgid "IDS_IME_BODY_SOFTWARE_KEYBOARD"
-msgstr "Πληκτρολόγιο οθόνης"
 

@@ -1,3 +1,11 @@
+ise-default (0.3.008-1) unstable; urgency=low
+
+  * Add 49 display languages
+  * Git: framework/uifw/ise-default
+  * Tag: ise-default_0.3.008-1
+
+ -- Sungmin Kwak <sungmin.kwak@samsung.com>  Tue, 28 Aug 2012 22:22:24 +0900
+
 ise-default (0.3.007-1) unstable; urgency=low
 
   * Change Keyboard setting close by focus-out instead of Home key
