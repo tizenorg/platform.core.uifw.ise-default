@@ -1,3 +1,11 @@
+ise-default (0.3.009-1) unstable; urgency=low
+
+  * Period(.) cannot be inputted by longpress in SYM mode
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.009-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 23 Aug 2012 14:13:41 +0530
+
 ise-default (0.3.008-1) unstable; urgency=low
 
   * Add 49 display languages

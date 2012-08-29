@@ -1,5 +1,5 @@
 # Process this file with autoconf to produce a configure script.
-AC_INIT(ise-default, 0.3.008, dalton.lee@samsung.com)
+AC_INIT(ise-default, 0.3.009, dalton.lee@samsung.com)
 AC_CONFIG_SRCDIR([src/ise.cpp])
 
 ELM_VERSION=0.0.1

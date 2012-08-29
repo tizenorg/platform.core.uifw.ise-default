@@ -424,7 +424,7 @@
 		_KeyVal_ {{"\xc2\xb7"},{"\xc2\xb7"},{"\xc2\xb7"}},
 		_KeyEvt_ {{0},{0},{0}},
 		".",
-		MVK_period,
+		0,
 		FALSE,
 	},
 	{
