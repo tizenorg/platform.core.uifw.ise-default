@@ -431,7 +431,7 @@
 		_KeyVal_ {{"v"},{"V"},{"V"}},
 		_KeyEvt_ {{MVK_v},{MVK_V},{MVK_V}},
 		".",
-		MVK_period,
+		0,
 		FALSE,
 	},
 	{

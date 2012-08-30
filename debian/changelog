@@ -1,3 +1,11 @@
+ise-default (0.3.011-1) unstable; urgency=low
+
+  * English keyboard, Longpress 'v' and 'V' does not input Period(.)
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.011-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 30 Aug 2012 12:39:55 +0530
+
 ise-default (0.3.010-1) unstable; urgency=low
 
   * Return key is shown as "www." for some layout
