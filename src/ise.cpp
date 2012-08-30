@@ -1502,6 +1502,8 @@ void ise_set_return_key_type(unsigned int type)
 
 	if (type != ECORE_IMF_INPUT_PANEL_RETURN_KEY_TYPE_DEFAULT)
 		ise_set_private_key(CUSTOMID_ENTER, buf, NULL, -1, NULL);
+	else
+		ise_set_private_key(CUSTOMID_ENTER, NULL, "B09_icon_enter.png", -1, NULL);
 }
 
 void ise_set_return_key_disable(unsigned int disabled)
