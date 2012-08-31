@@ -1,3 +1,12 @@
+ise-default (0.3.017-1) unstable; urgency=low
+
+  * 'i' is clicked when clicking at the top of 'j' or 'k' key
+  * 'i' and 'k' are clicked together at some point
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.017-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 31 Aug 2012 16:05:33 +0530
+
 ise-default (0.3.016-1) unstable; urgency=low
 
   * In landscape mode, Backspace button looks different for Number and Normal layout

@@ -895,7 +895,11 @@ const McfDefaultConfigure mcf_default_configure = {
 	FALSE,
 	SW_BTN_STYLE_A,
 	{TOUCH_OFFSET_LEVEL_1,TOUCH_OFFSET_LEVEL_2},
+#if defined(__arm__)
 	{{0, -20},{0, -15}}
+#else
+	{{0, 0},{0, 0}}
+#endif
 };
 
 static McfLabelProperties CAND_LABEL_PROP = {
