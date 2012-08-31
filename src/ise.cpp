@@ -138,6 +138,7 @@ static void ise_send_event(mcfulong keyEvent, mcfulong keyMask = 0);
 static void ise_forward_key_event(mcfulong keyEvent);
 
 static void _set_prediction_private_key();
+static void _set_backspace_private_key();
 static void _set_shift_private_key();
 
 static void ise_set_screen_rotation(int degree);
@@ -558,6 +559,7 @@ void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType ke
 	}
 
 	ise_update_cursor_position(g_cursor_position);
+	_set_backspace_private_key();
 
 	for (int loop = 0; loop < MAX_KEY; loop++) {
 		if (gDisableKeyBuffer[loop] != NOT_USED) {
@@ -679,6 +681,17 @@ static void _set_prediction_private_key()
 		change_prediction_onoff(FALSE);
 	} else {
 		change_prediction_onoff(TRUE);
+	}
+}
+
+static void _set_backspace_private_key()
+{
+	mcf8 mode = gCore->get_input_mode();
+	mcf8 layout = -1;
+	if (gCore->get_display_mode() == MCFDISPLAY_PORTRAIT) {
+		ise_set_private_key(CUSTOMID_BACKSPACE, NULL, "B09_icon_back.png", MVK_BackSpace, NULL);
+	} else {
+		ise_set_private_key(CUSTOMID_BACKSPACE, NULL, "B09_icon_back_50x50.png", MVK_BackSpace, NULL);
 	}
 }
 
@@ -960,6 +973,7 @@ void ise_show(int ic)
 	gCore->disable_input_events(FALSE);
 
 	ise_update_cursor_position(g_cursor_position);
+	_set_backspace_private_key();
 
 	for (int loop = 0; loop < MAX_KEY; loop++) {
 		if (gDisableKeyBuffer[loop] != NOT_USED) {

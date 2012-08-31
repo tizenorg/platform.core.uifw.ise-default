@@ -1,6 +1,6 @@
 Name:       ise-default
 Summary:    Tizen keyboard
-Version:    0.3.015
+Version:    0.3.016
 Release:    1
 Group:      TO_BE/FILLED_IN
 License:    Flora Software License
