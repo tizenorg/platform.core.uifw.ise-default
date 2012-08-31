@@ -67,6 +67,7 @@ INST_ICONS	= 	\
 	B09_icon_shift1.png \
 	B09_icon_shift2.png \
 	B09_icon_shift3.png \
+	B09_icon_shift3_russian.png \
 	B09_icon_shift_press.png \
 	B09_icon_shift1_land.png \
 	B09_icon_shift2_land.png \

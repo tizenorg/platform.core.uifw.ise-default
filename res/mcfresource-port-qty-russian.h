@@ -422,7 +422,7 @@
 		1,
 		_Label_ {{""},{""},{""}},
 		LABEL_PROPERTIES_QTY_DEFAULT_TYPE,
-		_LabelImg_ {{"B09_icon_shift1.png","B09_icon_shift_press.png","B09_icon_shift1.png"}, {"B09_icon_shift2.png","B09_icon_shift_press.png","B09_icon_shift1.png"}, {"B09_icon_shift3.png","B09_icon_shift_press.png","B09_icon_shift1.png"}},
+		_LabelImg_ {{"B09_icon_shift1.png","B09_icon_shift_press.png","B09_icon_shift1.png"}, {"B09_icon_shift2.png","B09_icon_shift_press.png","B09_icon_shift1.png"}, {"B09_icon_shift3_russian.png","B09_icon_shift_press.png","B09_icon_shift1.png"}},
 		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_01.png"}},
 		1,
 		_KeyVal_ {{""},{""},{""}},
