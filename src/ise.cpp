@@ -1283,8 +1283,8 @@ void ise_set_caps_mode(unsigned int mode)
         inputmode >= INPUT_MODE_QTY_FRENCH && inputmode <= INPUT_MODE_QTY_RUSSIAN ||
         inputmode == INPUT_MODE_QTY_URL ||
         inputmode == INPUT_MODE_QTY_EMAIL) {
-			change_shiftmode(mode ? SHIFTMODE_LOCK : SHIFTMODE_OFF);
-			gCore->set_shift_state(mode ? MCF_SHIFT_STATE_LOCK : MCF_SHIFT_STATE_OFF);
+			change_shiftmode(mode ? SHIFTMODE_ON : SHIFTMODE_OFF);
+			gCore->set_shift_state(mode ? MCF_SHIFT_STATE_ON : MCF_SHIFT_STATE_OFF);
 			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
 						mode ? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF);
 	}

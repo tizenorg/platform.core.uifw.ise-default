@@ -1,3 +1,11 @@
+ise-default (0.3.018-1) unstable; urgency=low
+
+  * When 'Auto capitalisation' is on, SHIFT key looks Lock mode, not On mode
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.018-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 31 Aug 2012 16:44:38 +0530
+
 ise-default (0.3.017-1) unstable; urgency=low
 
   * 'i' is clicked when clicking at the top of 'j' or 'k' key
