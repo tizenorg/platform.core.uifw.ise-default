@@ -535,7 +535,7 @@
 		USED, /* 5x2 */
 		1,
 		_Label_ {{"?123"},{"?123"},{"?123"}},
-		LABEL_PROPERTIES_QTY_BOTTOM_LINE_TYPE,
+		LABEL_PROPERTIES_QTY_NUM_DEFAULT_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}},
 		1,
@@ -566,7 +566,7 @@
 		USED, /* 4x4 */
 		3,
 		_Label_ {{".",""}, {".",""}, {".",""}},
-		LABEL_PROPERTIES_QTY_BOTTOM_LINE_TYPE,
+		LABEL_PROPERTIES_QTY_DOT_BUTTON_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}},
 		1,
@@ -611,7 +611,7 @@
 		USED, /* 4x5 */
 		3,
 		_Label_ {{".",""}, {".",""}, {".",""}},
-		LABEL_PROPERTIES_QTY_BOTTOM_LINE_TYPE,
+		LABEL_PROPERTIES_QTY_DOT_BUTTON_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}},
 		1,
@@ -670,7 +670,7 @@
 		USED, /* 4x6 */
 		3,
 		_Label_ {{".",""}, {".",""}, {".",""}},
-		LABEL_PROPERTIES_QTY_DEFAULT_TYPE,
+		LABEL_PROPERTIES_QTY_DOT_BUTTON_TYPE,
 		_LabelImg_ {{" "," "}, {" "," "}, {" "," "}},
 		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}},
 		1,
@@ -729,7 +729,7 @@
 		USED, /* 4x6 */
 		3,
 		_Label_ {{".",""}, {".",""}, {".",""}},
-		LABEL_PROPERTIES_QTY_DEFAULT_TYPE,
+		LABEL_PROPERTIES_QTY_DOT_BUTTON_TYPE,
 		_LabelImg_ {{" "," "}, {" "," "}, {" "," "}},
 		_BGImg_ {{"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}, {"B09_Qwerty_btn_02.png","B09_Qwerty_btn_press.png","B09_Qwerty_btn_02.png"}},
 		1,

@@ -1,3 +1,19 @@
+ise-default (0.3.014-1) unstable; urgency=low
+
+  * On KeyPress Label text changes to white color
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.014-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 31 Aug 2012 10:52:55 +0530
+
+ise-default (0.3.013-1) unstable; urgency=low
+
+  * Label text in return and other keys is white in some cases
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.013-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Thu, 30 Aug 2012 17:56:55 +0530
+
 ise-default (0.3.012-1) unstable; urgency=low
 
   * In Russian Shift Lock mode Shift key bubble is outside the key area
