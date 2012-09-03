@@ -1,3 +1,11 @@
+ise-default (0.3.020-1) unstable; urgency=low
+
+  * In AutoCaps on Shift lock mode not retained
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.020-1
+
+ -- Ankush Dua <ankush.d@samsung.com>  Mon, 03 Sep 2012 14:12:38 +0530
+
 ise-default (0.3.019-1) unstable; urgency=low
 
   * Center line 2 pixels were left unclickable

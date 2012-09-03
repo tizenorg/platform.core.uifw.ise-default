@@ -949,12 +949,14 @@ void ise_show(int ic)
 			_set_prediction_private_key();
 		}
 
+		/* We need to set shift state after setting input mode,
+			since setting input mode restores shift state back to off */
 		if(gExternalShiftLockMode) {
-			change_shiftmode(SHIFTMODE_LOCK);
+			change_shiftmode(SHIFTMODE_ON);
 			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
 					ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-			if (gCore->get_shift_state() != MCF_SHIFT_STATE_LOCK) {
-				gCore->set_shift_state(MCF_SHIFT_STATE_LOCK);
+			if (gCore->get_shift_state() != MCF_SHIFT_STATE_ON) {
+				gCore->set_shift_state(MCF_SHIFT_STATE_ON);
 				bShouldUpdate = TRUE;
 			}
 		} else {
@@ -1280,13 +1282,15 @@ void ise_set_caps_mode(unsigned int mode)
 	}
 
 	if (inputmode == INPUT_MODE_QTY_ENGLISH ||
-        inputmode >= INPUT_MODE_QTY_FRENCH && inputmode <= INPUT_MODE_QTY_RUSSIAN ||
-        inputmode == INPUT_MODE_QTY_URL ||
-        inputmode == INPUT_MODE_QTY_EMAIL) {
-			change_shiftmode(mode ? SHIFTMODE_ON : SHIFTMODE_OFF);
-			gCore->set_shift_state(mode ? MCF_SHIFT_STATE_ON : MCF_SHIFT_STATE_OFF);
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
+		inputmode >= INPUT_MODE_QTY_FRENCH && inputmode <= INPUT_MODE_QTY_RUSSIAN ||
+		inputmode == INPUT_MODE_QTY_URL ||
+		inputmode == INPUT_MODE_QTY_EMAIL) {
+			if(get_Ise_default_context().ShiftMode != SHIFTMODE_LOCK) {
+				change_shiftmode(mode ? SHIFTMODE_ON : SHIFTMODE_OFF);
+				gCore->set_shift_state(mode ? MCF_SHIFT_STATE_ON : MCF_SHIFT_STATE_OFF);
+				helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
 						mode ? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF);
+			}
 	}
 }
 
