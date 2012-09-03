@@ -105,6 +105,13 @@ CMCFWindowsImplEfl::create_context_popup_window(const mcfwindow parentWnd)
         dpy = ecore_x_display_get();
         elm_win_borderless_set(mcf_context_window, EINA_TRUE);
         elm_win_alpha_set(mcf_context_window, EINA_TRUE);
+
+        const char *szProfile[] = {"mobile", ""};
+        elm_win_profiles_set(mcf_context_window, szProfile, 1);
+        {
+            printf("elm_win_profiles_set : %p %s\n", szProfile[0], szProfile[0]);
+        }
+
         ecore_x_window_size_get(ecore_x_window_root_first_get(), &w, &h);
         ecore_x_icccm_name_class_set(elm_win_xwindow_get(static_cast<Evas_Object*>(mcf_context_window)), "ISF Context Popup", "ISF");
         set_window_accepts_focus(mcf_context_window, FALSE);
@@ -162,6 +169,12 @@ CMCFWindowsImplEfl::create_window(const mcfwindow parentWnd, McfWindowContext *w
     evas_object_resize(win, width, height);
 #endif
 
+    const char *szProfile[] = {"mobile", ""};
+    elm_win_profiles_set(win, szProfile, 1);
+    {
+        printf("elm_win_profiles_set : %p %s\n", szProfile[0], szProfile[0]);
+    }
+
     ecore_x_icccm_name_class_set(elm_win_xwindow_get(static_cast<Evas_Object*>(win)), "ISF Popup", "ISF");
 
     set_window_accepts_focus(win, FALSE);
@@ -192,6 +205,12 @@ CMCFWindowsImplEfl::create_dim_window(const mcfwindow parentWnd, McfWindowContex
     elm_win_borderless_set(win, EINA_TRUE);
     elm_win_alpha_set(win, EINA_TRUE);
     evas_object_resize(win, width, height);
+
+    const char *szProfile[] = {"mobile", ""};
+    elm_win_profiles_set(win, szProfile, 1);
+    {
+        printf("elm_win_profiles_set : %p %s\n", szProfile[0], szProfile[0]);
+    }
 
     ecore_x_icccm_name_class_set(elm_win_xwindow_get(static_cast<Evas_Object*>(win)), "ISF Popup", "ISF");
 
