@@ -361,6 +361,8 @@ CMCFResourceCache::resize_resource_elements_by_resolution()
             }
         }
     }
+
+    return TRUE;
 }
 
 /**
@@ -507,7 +509,7 @@ CMCFResourceCache::add_private_key(McfPrivateKeyProperties* privProperties, mcfb
         return -1;
 
     /* Finds an index to be set */
-    mcfint loop = 0;
+    mcfuint loop = 0;
     for (loop = 0;loop < MAX_PRIVATE_KEY; loop++) {
         if ((mPrivateKeyProperties[loop].inputModeIdx == privProperties->inputModeIdx) &&
             (mPrivateKeyProperties[loop].layoutIdx == privProperties->layoutIdx) &&
@@ -563,8 +565,6 @@ CMCFResourceCache::remove_private_key(mcfint id)
 {
     MCF_DEBUG();
     mcfint loop;
-    CMCFContext *context = CMCFContext::get_instance();
-
 
     /* resets the current properties to predefined properties */
     mcfbyte keyidx = mPrivateKeyProperties[id].keyIdx;
@@ -578,7 +578,7 @@ CMCFResourceCache::remove_private_key(mcfint id)
 
     /* Shift all the privatekey properties to the left by 1, starting from the item next to the id th element */
     for (loop = id;loop < MAX_PRIVATE_KEY - 1; loop++) {
-        memcpy(&mPrivateKeyProperties[loop], &mPrivateKeyProperties[loop + 1], sizeof(&mPrivateKeyProperties[loop]));
+        memcpy(&mPrivateKeyProperties[loop], &mPrivateKeyProperties[loop + 1], sizeof(McfPrivateKeyProperties));
     }
     /* Fill 0x00 to the last element */
     memset(&mPrivateKeyProperties[MAX_PRIVATE_KEY - 1], 0x00, sizeof(McfPrivateKeyProperties));
@@ -610,9 +610,7 @@ CMCFResourceCache::recompute_layout(mcfwindow window)
 
     CMCFWindows *windows = CMCFWindows::get_instance();
     CMCFContext *context = CMCFContext::get_instance();
-    mcfbyte display = context->get_display();
-    mcfbyte inputmode = context->get_input_mode();
-    mcfint sublayoutidx = context->get_cur_sublayout_id();
+    mcfbyte inputmode = MAX_INPUT_MODE;
 
     McfKeyset keyset = MAX_KEYSET;
     mcf8 popupindex = NOT_USED;
@@ -625,6 +623,7 @@ CMCFResourceCache::recompute_layout(mcfwindow window)
 
     mcfshort layout =  NOT_USED;
     if(windows && context) {
+        inputmode = context->get_input_mode();
         if (windows->is_base_window(window)) {
             layout = mcf_input_mode_configure[inputmode].layoutId[context->get_display()];
 
@@ -1114,6 +1113,7 @@ CMCFResourceCache::set_cur_themename( const mcfchar *themename )
                 }
                 index++;
             }
+            fclose(fp);
         }
     }
 

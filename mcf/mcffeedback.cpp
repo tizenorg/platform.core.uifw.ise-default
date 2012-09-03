@@ -49,12 +49,6 @@ mcfboolean
 CMCFFeedback::button_pressed(mcfwindow window, mcfbyte keyindex)
 {
     MCF_DEBUG();
-    CMCFResourceCache *cache = CMCFResourceCache::get_instance();
-    if(cache) {
-        const McfLayoutKeyConfigure *configure = cache->get_cur_layout_key_configure(window, keyindex);
-        CMCFUtils *utils = CMCFUtils::get_instance();
-        CMCFContext *context = CMCFContext::get_instance();
-    }
     return TRUE;
 }
 

@@ -44,7 +44,7 @@ public:
 private:
 
 public:
-    mcfboolean run();
+    void run();
     void show();
     void hide();
 

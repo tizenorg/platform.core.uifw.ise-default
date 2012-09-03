@@ -533,8 +533,6 @@ CMCFContext::get_multi_touch_event_order(mcftouchdevice touchid)
     mcfint ret = -1;
     mcfint iSeqIndex = 0;
 
-    CMCFResourceCache *cache = CMCFResourceCache::get_instance();
-
     for(std::list<mcftouchdevice>::iterator list_iter = mMultiTouchSeq.begin();
         (ret == -1) && list_iter != mMultiTouchSeq.end();std::advance(list_iter, 1)) {
             if(touchid == (*list_iter)) {

@@ -93,15 +93,6 @@ CMCFUIBuilder::init(mcfwindow parentWnd)
     if(mcf_check_arrindex(defaultLayoutIdx, MAX_LAYOUT)) {
         mGwes->mWnd->create_dim_window(window, NULL, mcf_layout[defaultLayoutIdx].width, mcf_layout[defaultLayoutIdx].height);
     }
-
-    /* For testing pre-image load */
-    CMCFImageProxy *proxy = CMCFImageProxy::get_instance();
-    mcfchar retPath[_POSIX_PATH_MAX] = {0,};
-    for (mcfint loop = 0; loop < MAX_PRELOAD_IMG_CNT; loop++) {
-        memset(retPath, 0x00, sizeof(mcfchar)*_POSIX_PATH_MAX);
-        mUtils->get_composed_path(retPath, sizeof(retPath), mcf_preload_image[loop]);
-        proxy->get_image(retPath);
-    }
 }
 
 /**
@@ -162,12 +153,14 @@ CMCFUIBuilder::show_layout(const mcfwindow window, const mcf16 x, const mcf16 y,
                     mcfint targety = layout->y;
                     mcfwindow targetwin = window;
                     McfWindowContext *winctx = windows->get_window_context(window, FALSE);
-                    if(winctx->isVirtual) {
-                        McfWindowContext *basectx = windows->get_window_context(windows->get_base_window(), FALSE);
-                        if(basectx) {
-                            targetwin = windows->get_base_window();
-                            targetx += winctx->x - basectx->x;
-                            targety += winctx->y - basectx->y;
+                    if (winctx) {
+                        if(winctx->isVirtual) {
+                            McfWindowContext *basectx = windows->get_window_context(windows->get_base_window(), FALSE);
+                            if(basectx) {
+                                targetwin = windows->get_base_window();
+                                targetx += winctx->x - basectx->x;
+                                targety += winctx->y - basectx->y;
+                            }
                         }
                     }
                     if (strlen(layout->imgPath[BUTTON_STATE_NORMAL]) > 0) {
@@ -339,7 +332,7 @@ CMCFUIBuilder::draw_button_label(const mcfwindow window, const mcfdrawctx drawCt
     mcfint targetaddy = 0;
     mcfwindow targetwin = window;
     McfWindowContext *winctx = windows->get_window_context(window, FALSE);
-
+    if (winctx) {
         if(winctx->isVirtual) {
             McfWindowContext *basectx = windows->get_window_context(windows->get_base_window(), FALSE);
             if(basectx) {
@@ -348,6 +341,7 @@ CMCFUIBuilder::draw_button_label(const mcfwindow window, const mcfdrawctx drawCt
                 targetaddy = winctx->y - basectx->y;
             }
         }
+    }
 
         /* for image label  */
         if (properties->labelImgPath[fShift][state]) {
@@ -494,8 +488,10 @@ CMCFUIBuilder::draw_window_bg_by_sw(const mcfwindow window, const mcfdrawctx dra
         /* If the target window is virtual window, let's draw it on the base window */
         mcfwindow targetwin = window;
         McfWindowContext *winctx = windows->get_window_context(window, FALSE);
-        if(winctx->isVirtual) {
-            targetwin = windows->get_base_window();
+        if (winctx) {
+            if(winctx->isVirtual) {
+                targetwin = windows->get_base_window();
+            }
         }
 
         graphics->draw_rectangle(targetwin, drawCtx, 0, 0, size.width, size.height, lineWidth, lineColor, TRUE, fillColor);
@@ -605,12 +601,14 @@ CMCFUIBuilder::draw_button_bg_by_img(const mcfwindow window, const mcfdrawctx dr
         mcfint targety = coordination->y;
         mcfwindow targetwin = window;
         McfWindowContext *winctx = windows->get_window_context(window, FALSE);
-        if(winctx->isVirtual) {
-            McfWindowContext *basectx = windows->get_window_context(windows->get_base_window(), FALSE);
-            if(basectx) {
-                targetwin = windows->get_base_window();
-                targetx += winctx->x - basectx->x;
-                targety += winctx->y - basectx->y;
+        if(winctx) {
+            if(winctx->isVirtual) {
+                McfWindowContext *basectx = windows->get_window_context(windows->get_base_window(), FALSE);
+                if(basectx) {
+                    targetwin = windows->get_base_window();
+                    targetx += winctx->x - basectx->x;
+                    targety += winctx->y - basectx->y;
+                }
             }
         }
 

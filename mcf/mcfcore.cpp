@@ -57,7 +57,7 @@ CMCFCore::~CMCFCore()
  * Shows the MCF main window
  * For displaying the MCF UI, you should explicitly call this function after CMCFCore class is created
  */
-mcfboolean
+void
 CMCFCore::run()
 {
     MCF_DEBUG();

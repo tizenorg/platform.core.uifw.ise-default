@@ -175,7 +175,6 @@ mcfwindow CMCFWindows::open_popup(const mcfwindow parentWnd, const mcfint parent
                 mcfbyte pressedKey = context->get_cur_pressed_key(context->get_last_touch_device_id());
 
                 const McfLayoutKeyCoordination* coordination = cache->get_cur_layout_key_coordination(pressedWin, pressedKey);
-                McfButtonContext *btncontext = cache->get_cur_button_context(pressedWin, pressedKey);
 
                 mcfwindow move_window = context->get_cur_move_window(context->get_last_touch_device_id());
                 McfPoint move_point = context->get_cur_move_point(context->get_last_touch_device_id());
@@ -236,10 +235,6 @@ mcfwindow CMCFWindows::open_context_popup(const mcfwindow parentWnd)
     CMCFEvents *events = CMCFEvents::get_instance();
     CMCFActionState *state = CMCFActionState::get_instance();
     CMCFController *controller = CMCFController::get_instance();
-    CMCFResourceCache *cache = CMCFResourceCache::get_instance();
-    CMCFContext *context = CMCFContext::get_instance();
-    CMCFWindows *windows = CMCFWindows::get_instance();
-    CMCFUtils *utils = CMCFUtils::get_instance();
     CMCFWindowsImpl* impl = get_mcf_windows_impl();
     ctx_window = impl->create_context_popup_window(parentWnd);
     events->connect_window_events(ctx_window, MCF_EVENT_MOUSE | MCF_EVENT_EXPOSE);

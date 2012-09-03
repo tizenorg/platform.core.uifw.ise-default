@@ -921,10 +921,6 @@ static McfLabelProperties AUTOPOPUP_LABEL_PROP = {
 extern McfAutoPopupConfigure mcf_autopopup_configure;
 extern McfDimWndConfigure mcf_dim_window_configure;
 
-#define MAX_PRELOAD_IMG_CNT 0
-static const mcfchar* mcf_preload_image[MAX_PRELOAD_IMG_CNT] = {
-};
-
 static const McfNinePatchInfo mcf_nine_patch_info[] = {
 	{"textinput_moa_button1_nml.png", 3, 3, 3, 3},
 	{"textinput_moa_button1_function.png", 3, 3, 3, 3},

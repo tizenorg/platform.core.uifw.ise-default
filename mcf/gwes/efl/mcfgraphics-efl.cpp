@@ -215,11 +215,7 @@ CMCFGraphicsImplEfl::draw_image(mcfwindow window, const mcfdrawctx drawCtx, mcfc
 #else
                         evas_object_move(imgobj, destX - srcX, destY - srcY);
                         evas_object_image_fill_set(imgobj, 0, 0, imgWidth, imgHeight);
-                        if(extractImg) {
-                            evas_object_resize(imgobj, imgWidth, imgHeight);
-                        } else {
-                            evas_object_resize(imgobj, destWidth, destHeight);
-                        }
+                        evas_object_resize(imgobj, imgWidth, imgHeight);
 
                         Evas_Object *clipper = evas_object_rectangle_add(evas);
                         evas_object_color_set(clipper, 255, 255, 255, 255);
