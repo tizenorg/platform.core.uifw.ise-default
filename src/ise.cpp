@@ -878,97 +878,99 @@ void ise_show(int ic)
 		bRotated = TRUE;
 	}
 
+	if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
+		mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
+	} else if (gIseLayout ==  ISE_LAYOUT_STYLE_URL) {
+		mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
+	} else if (gIseLayout ==  ISE_LAYOUT_STYLE_EMAIL) {
+		mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
+	} else {
+		mcfInputMode = IseDefaultValue[gIseLayout].mcfInputMode;
+	}
+
+	if (gFKeypadMode && gIseScreenDegree != 90
+			&& gIseScreenDegree != 270) {
+			newInputMode = IseDefaultInputModes[mcfInputMode][0];
+	} else {
+			newInputMode = IseDefaultInputModes[mcfInputMode][1];
+	}
+
+	if (newInputMode != NOT_USED) {
+		mcfInputMode = newInputMode;
+	}
+
+	if (mcfInputMode >= 0 && mcfInputMode < MAX_INPUT_MODE) {
+		g_currentLanguage = langID;
+		IseLangDataSelectState[g_currentLanguage] = true;
+		change_ldb_option(internalLangToLang[langID]);
+		change_keypad((uint32)IseKeypadMode[mcfInputMode]
+					[(gCore->get_display_mode() == MCFDISPLAY_LANDSCAPE) ? 1 : 0]);
+
+		if (ic != gPrevInputContext) {
+			change_completion_option(IseInitialCompletionMode[mcfInputMode][get_Ise_default_context().OnOff]);
+		}
+
+		gCore->set_input_mode(mcfInputMode, TRUE);
+
+		mcf8 subLayoutID = IseDefaultValue[gIseLayout].subLayoutID;
+		if(gCore->get_cur_sublayout_id() != subLayoutID)
+		{
+			gCore->set_cur_sublayout_id(subLayoutID);
+			bShouldUpdate = TRUE;
+		}
+
+		if (ic != gPrevInputContext) {
+			gInitialInputMode = mcfInputMode;
+		}
+
+		language = mcfLanguageByInputMode[mcfInputMode];
+	}
+
+	if (get_Ise_default_context().Language != language
+		&& language != NOT_USED) {
+		change_ldb_option(language);
+	}
+
+	if (TRUE &&
+#ifdef SUPPORTS_LAYOUT_STYLE_MONTH
+		gCore->get_input_mode() != INPUT_MODE_4X4_MONTH &&
+#endif
+#ifdef SUPPORTS_LAYOUT_STYLE_NUMBERONLY
+		gCore->get_input_mode() != INPUT_MODE_4X4_NUMONLY &&
+#endif
+#ifdef SUPPORTS_LAYOUT_STYLE_IP
+		gCore->get_input_mode() != INPUT_MODE_4X4_IPv6_123 &&
+#endif
+		TRUE) {
+		_set_prediction_private_key();
+	}
+
+	/* We need to set shift state after setting input mode,
+		since setting input mode restores shift state back to off */
+	if(gExternalShiftLockMode) {
+		change_shiftmode(SHIFTMODE_ON);
+		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
+				ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
+		if (gCore->get_shift_state() != MCF_SHIFT_STATE_ON) {
+			gCore->set_shift_state(MCF_SHIFT_STATE_ON);
+			bShouldUpdate = TRUE;
+		}
+	} else {
+		change_shiftmode(IseDefaultValue[gIseLayout].ShiftMode);
+		helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
+				(IseDefaultValue[gIseLayout].ShiftMode == SHIFTMODE_OFF)
+				? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
+		if (IseDefaultValue[gIseLayout].ShiftMode != gCore->get_shift_state()) {
+			gCore->set_shift_state((MCFShiftState)IseDefaultValue[gIseLayout].ShiftMode);
+			bShouldUpdate = TRUE;
+		}
+	}
+
 	if (ic != gPrevInputContext || gFLayoutChanged || !gFInputContextSet
 		|| bRotated || (g_currentLanguage != gExplicitLanguageSetting
 		&& gExplicitLanguageSetting != NOT_USED)) {
 		set_single_commit(IseDefaultValue[gIseLayout].SingleCommit);
 		change_inputmode(IseDefaultValue[gIseLayout].InputMode);
-
-		if (IseDefaultValue[gIseLayout].mcfInputMode == INPUT_MODE_NATIVE) {
-			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-		} else if (gIseLayout ==  ISE_LAYOUT_STYLE_URL) {
-			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-		} else if (gIseLayout ==  ISE_LAYOUT_STYLE_EMAIL) {
-			mcfInputMode = mcfInputModeByLanguage[IseDefaultValue[gIseLayout].KeypadMode][langID];
-		} else {
-			mcfInputMode = IseDefaultValue[gIseLayout].mcfInputMode;
-		}
-
-		if (gFKeypadMode && gIseScreenDegree != 90
-				&& gIseScreenDegree != 270) {
-				newInputMode = IseDefaultInputModes[mcfInputMode][0];
-		} else {
-				newInputMode = IseDefaultInputModes[mcfInputMode][1];
-		}
-		if (newInputMode != NOT_USED) {
-			mcfInputMode = newInputMode;
-		}
-		if (mcfInputMode >= 0 && mcfInputMode < MAX_INPUT_MODE) {
-			g_currentLanguage = langID;
-			IseLangDataSelectState[g_currentLanguage] = true;
-			change_ldb_option(internalLangToLang[langID]);
-			change_keypad((uint32)IseKeypadMode[mcfInputMode]
-						[(gCore->get_display_mode() == MCFDISPLAY_LANDSCAPE) ? 1 : 0]);
-
-			if (ic != gPrevInputContext) {
-				change_completion_option(IseInitialCompletionMode[mcfInputMode][get_Ise_default_context().OnOff]);
-			}
-
-			gCore->set_input_mode(mcfInputMode, TRUE);
-
-			mcf8 subLayoutID = IseDefaultValue[gIseLayout].subLayoutID;
-			if(gCore->get_cur_sublayout_id() != subLayoutID)
-			{
-				gCore->set_cur_sublayout_id(subLayoutID);
-				bShouldUpdate = TRUE;
-			}
-
-			if (ic != gPrevInputContext) {
-				gInitialInputMode = mcfInputMode;
-			}
-
-			language = mcfLanguageByInputMode[mcfInputMode];
-		}
-
-		if (get_Ise_default_context().Language != language
-			&& language != NOT_USED) {
-			change_ldb_option(language);
-		}
-
-		if (TRUE &&
-#ifdef SUPPORTS_LAYOUT_STYLE_MONTH
-			gCore->get_input_mode() != INPUT_MODE_4X4_MONTH &&
-#endif
-#ifdef SUPPORTS_LAYOUT_STYLE_NUMBERONLY
-			gCore->get_input_mode() != INPUT_MODE_4X4_NUMONLY &&
-#endif
-#ifdef SUPPORTS_LAYOUT_STYLE_IP
-			gCore->get_input_mode() != INPUT_MODE_4X4_IPv6_123 &&
-#endif
-			TRUE) {
-			_set_prediction_private_key();
-		}
-
-		/* We need to set shift state after setting input mode,
-			since setting input mode restores shift state back to off */
-		if(gExternalShiftLockMode) {
-			change_shiftmode(SHIFTMODE_ON);
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-					ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-			if (gCore->get_shift_state() != MCF_SHIFT_STATE_ON) {
-				gCore->set_shift_state(MCF_SHIFT_STATE_ON);
-				bShouldUpdate = TRUE;
-			}
-		} else {
-			change_shiftmode(IseDefaultValue[gIseLayout].ShiftMode);
-			helper_agent.update_input_context(ECORE_IMF_INPUT_PANEL_SHIFT_MODE_EVENT,
-					(IseDefaultValue[gIseLayout].ShiftMode == SHIFTMODE_OFF)
-					? ECORE_IMF_INPUT_PANEL_SHIFT_MODE_OFF : ECORE_IMF_INPUT_PANEL_SHIFT_MODE_ON);
-			if (IseDefaultValue[gIseLayout].ShiftMode != gCore->get_shift_state()) {
-				gCore->set_shift_state((MCFShiftState)IseDefaultValue[gIseLayout].ShiftMode);
-				bShouldUpdate = TRUE;
-			}
-		}
 	}
 
 	gCore->show();
