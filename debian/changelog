@@ -1,3 +1,11 @@
+ise-default (0.3.025-1) unstable; urgency=low
+
+  * Update po files.
+  * Git: slp/pkgs/i/ise-default
+  * Tag: ise-default_0.3.025-1
+
+ -- Sungmin Kwak <sungmin.kwak@samsung.com>  Wed, 05 Sep 2012 19:04:14 +0900
+
 ise-default (0.3.024-1) unstable; urgency=low
 
   * Changed the font properties for URL Popup

@@ -1,5 +1,5 @@
 msgid "IDS_IME_BODY_WRITING_LANGUAGES"
-msgstr "Schrijftalen"
+msgstr "Yozish tillari"
 
 msgid "IDS_IME_OPT_LANG_DUTCH"
 msgstr "Nederlands"
@@ -29,12 +29,13 @@ msgid "IDS_IME_POP_LANG_ITALIAN"
 msgstr "Italiano"
 
 msgid "IDS_IME_POP_LANG_PORTUGUESE"
-msgstr "Portugees"
+msgstr "Português"
 
 msgid "IDS_IME_BODY_YOU_MUST_SELECT_AT_LEAST_ONE_LANGUAGE_IN_KEYBOARD_SETTINGS"
-msgstr "Selecteer ten minste één taal in de toetsenbordinstellingen"
+msgstr "Klaviatura parametrlarida kamida bir til tanlashingiz lozim"
 
 msgid "IDS_IME_BODY_KEYBOARD_SETTINGS"
-msgstr "Toetsenbordinstellingen"
+msgstr "Klaviatura parametrlari"
+
 
 
