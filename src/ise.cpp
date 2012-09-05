@@ -864,8 +864,8 @@ void ise_show(int ic)
 	mcf8 newInputMode = NOT_USED;
 	mcf8 language = NOT_USED;
 
-	if (mcf_check_arrindex(gExplicitLanguageSetting, MAX_LANG_NUM)) {
-		langID = gExplicitLanguageSetting;
+	if (mcf_check_arrindex(_setup_info.current_language, MAX_LANG_NUM)) {
+		langID = _setup_info.current_language;
 	}
 
 	gCore->set_update_pending(TRUE);
