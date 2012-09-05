@@ -294,7 +294,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".co.kr"},{".co.kr"},{".co.kr"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -308,7 +308,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".or.kr"},{".or.kr"},{".or.kr"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -322,7 +322,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".ac.kr"},{".ac.kr"},{".ac.kr"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -336,7 +336,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".go.kr"},{".go.kr"},{".go.kr"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -350,7 +350,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".net"},{".net"},{".net"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -364,7 +364,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".org"},{".org"},{".org"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -378,7 +378,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".edu"},{".edu"},{".edu"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
@@ -392,7 +392,7 @@
 		USED, /* 1x1 */
 		1,
 		_Label_ {{".gov"},{".gov"},{".gov"}},
-		LABEL_PROPERTIES_PUNTUATION_BUTTON_TYPE,
+		LABEL_PROPERTIES_URL_POPUP_TYPE,
 		_LabelImg_ {{"",""}, {"",""}, {"",""}},
 		_BGImg_ {{"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}, {"B09_bg_Popup.png","B09_key_btn_press.png","B09_key_btn_press.png"}},
 		1,
