@@ -526,7 +526,7 @@ void _on_input_mode_changed(mcfchar * keyValue, mcfulong keyEvent, MCFKeyType ke
 		if (gCore->get_input_mode() == INPUT_MODE_QTY_ENGLISH ||
 			gCore->get_input_mode() == INPUT_MODE_QTY_URL ||
 			gCore->get_input_mode() == INPUT_MODE_QTY_EMAIL) {
-				change_shiftmode(SHIFTMODE_LOCK);
+				change_shiftmode(SHIFTMODE_ON);
 		}
 	}
 
