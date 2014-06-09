@@ -1,3 +1,5 @@
+%bcond_with wayland
+
 Name:       ise-default
 Summary:    Tizen keyboard
 Version:    1.0.8
@@ -11,12 +13,17 @@ BuildRequires:  gettext-tools
 BuildRequires:  edje-bin
 BuildRequires:  cmake
 BuildRequires:  pkgconfig(elementary)
+%if %{with wayland}
+BuildRequires:  pkgconfig(ecore-wayland)
+BuildRequires:  pkgconfig(wayland-client)
+%else
 BuildRequires:  pkgconfig(utilX)
+BuildRequires:  pkgconfig(x11)
+%endif
 BuildRequires:  pkgconfig(isf)
 BuildRequires:  pkgconfig(vconf)
 BuildRequires:  pkgconfig(aul)
 BuildRequires:  pkgconfig(dlog)
-BuildRequires:  pkgconfig(x11)
 BuildRequires:  pkgconfig(libscl-ui)
 BuildRequires:  pkgconfig(ecore-imf)
 BuildRequires:  pkgconfig(libxml-2.0)
@@ -34,7 +41,11 @@ Description: Tizen keyboard
 
 
 %build
+%if %{with wayland}
+cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix} -Dwith_wayland=TRUE
+%else
 cmake . -DCMAKE_INSTALL_PREFIX=%{_prefix}
+%endif
 
 make %{?jobs:-j%jobs}
 
