@@ -24,7 +24,9 @@
 #include <Elementary.h>
 #include <efl_assist.h>
 #include <Ecore_IMF.h>
+#ifndef WAYLAND
 #include <Ecore_X.h>
+#endif
 #include "option.h"
 
 #ifdef HAVE_CONFIG_H
