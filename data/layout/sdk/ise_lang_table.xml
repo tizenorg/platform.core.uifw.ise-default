@@ -89,5 +89,10 @@
   <!--
   <rec language="Sinhala" language_name="﻿සිංහල" inputmode_QTY="SINHALA_QTY" inputmode_QTY_name="Sinhala" main_keyboard_name="සිංහල" keyboard_ise_uuid="uuid_default" country_code_URL="lk"/>
   -->
+
+ <rec language="Hindi" language_name="हिन्दी" inputmode_QTY="HINDI_QTY" inputmode_QTY_name="Hindi" keyboard_ise_uuid="uuid_default" country_code_URL="in" is_latin_language="true" accepts_caps_mode="true" locale_string="hi"/>
+ <rec language="Irish" language_name="Irish" inputmode_QTY="IRISH_QTY" inputmode_QTY_name="Irish Qwerty" keyboard_ise_uuid="uuid_default" country_code_URL="ga" is_latin_language="true" accepts_caps_mode="true" locale_string="ga_IE"/>
+ <rec language="Uzbek" language_name="Uzbek" inputmode_QTY="UZBEK_QTY" inputmode_QTY_name="Uzbek Qwerty" keyboard_ise_uuid="uuid_default" country_code_URL="uz" is_latin_language="true" accepts_caps_mode="true" locale_string="uz_UZ"/>
+
 </language_table>
 </languages>
