@@ -83,7 +83,6 @@ struct OPTION_ELEMENTS
         memset(selected_language_item, 0x00, sizeof(selected_language_item));
 
         itc_main_text_radio = NULL;
-        itc_main_sub_text_radio = NULL;
         itc_group_title = NULL;
     }
     Evas_Object *option_window;
@@ -102,7 +101,6 @@ struct OPTION_ELEMENTS
     Elm_Object_Item *selected_language_item[OPTION_MAX_LANGUAGES];
 
     Elm_Genlist_Item_Class *itc_main_text_radio;
-    Elm_Genlist_Item_Class *itc_main_sub_text_radio;
     Elm_Genlist_Item_Class *itc_group_title;
 };
 
@@ -535,10 +533,6 @@ static void destroy_genlist_item_classes(SCLOptionWindowType type)
         elm_genlist_item_class_free(option_elements[type].itc_main_text_radio);
         option_elements[type].itc_main_text_radio = NULL;
     }
-    if (option_elements[type].itc_main_sub_text_radio) {
-        elm_genlist_item_class_free(option_elements[type].itc_main_sub_text_radio);
-        option_elements[type].itc_main_sub_text_radio = NULL;
-    }
     if (option_elements[type].itc_group_title) {
         elm_genlist_item_class_free(option_elements[type].itc_group_title);
         option_elements[type].itc_group_title = NULL;
@@ -574,15 +568,6 @@ static void create_genlist_item_classes(SCLOptionWindowType type)
         option_elements[type].itc_main_text_radio->func.del = _main_gl_del;
     }
 
-    option_elements[type].itc_main_sub_text_radio = elm_genlist_item_class_new();
-    if (option_elements[type].itc_main_sub_text_radio) {
-        option_elements[type].itc_main_sub_text_radio->item_style = "type1";//"multiline_sub.main.1icon";
-        option_elements[type].itc_main_sub_text_radio->func.text_get = _main_gl_text_get;
-        option_elements[type].itc_main_sub_text_radio->func.content_get = _main_radio_gl_content_get;
-        option_elements[type].itc_main_sub_text_radio->func.state_get = _main_gl_state_get;
-        option_elements[type].itc_main_sub_text_radio->func.del = _main_gl_del;
-    }
-
     option_elements[type].itc_group_title = elm_genlist_item_class_new();
     if (option_elements[type].itc_group_title) {
         option_elements[type].itc_group_title->item_style = "group_index";
@@ -591,39 +576,6 @@ static void create_genlist_item_classes(SCLOptionWindowType type)
         option_elements[type].itc_group_title->func.state_get = _main_gl_state_get;
         option_elements[type].itc_group_title->func.del = _main_gl_del;
     }
-}
-
-static std::string compose_selected_languages_string(void)
-{
-    const int NUM_DISPLAY_LANGUAGE = 2;
-
-    const int TEMP_STRING_LEN = 255;
-    char szTemp[TEMP_STRING_LEN];
-
-    std::string languages;
-    int num_languages = 0;
-
-    for (scluint loop = 0;loop < _language_manager.get_languages_num();loop++) {
-        LANGUAGE_INFO *info = _language_manager.get_language_info(loop);
-        if (info) {
-            if (info->enabled) {
-                num_languages++;
-                if (num_languages <= NUM_DISPLAY_LANGUAGE) {
-                    if (num_languages > 1) {
-                        languages += ", ";
-                    }
-                    languages += info->display_name;
-                }
-            }
-        }
-    }
-    if (num_languages > NUM_DISPLAY_LANGUAGE) {
-        snprintf(szTemp, TEMP_STRING_LEN, "%d (%s, ...)", num_languages, languages.c_str());
-    } else {
-        snprintf(szTemp, TEMP_STRING_LEN, "%d (%s)", num_languages, languages.c_str());
-    }
-
-    return std::string(szTemp);
 }
 
 static void language_selection_finished_cb(void *data, Evas_Object *obj, void *event_info)
@@ -760,8 +712,6 @@ Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe
 
     if (_language_manager.get_languages_num() > 1) {
         strncpy(main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE].main_text, SELECT_LANGUAGES, ITEM_DATA_STRING_LEN - 1);
-        //std::string languages = compose_selected_languages_string();
-        //strncpy(main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE].sub_text, languages.c_str(), ITEM_DATA_STRING_LEN - 1);
         main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE].mode = SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE;
         option_elements[type].languages_item =
             elm_genlist_item_append(genlist, option_elements[type].itc_main_text_only, &main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE],
@@ -779,14 +729,14 @@ Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe
     strncpy(main_itemdata[SETTING_ITEM_ID_AUTO_CAPITALISE].main_text, AUTO_CAPITALISE, ITEM_DATA_STRING_LEN - 1);
     strncpy(main_itemdata[SETTING_ITEM_ID_AUTO_CAPITALISE].sub_text, CAPITALISE_DESC, ITEM_DATA_STRING_LEN - 1);
     main_itemdata[SETTING_ITEM_ID_AUTO_CAPITALISE].mode = SETTING_ITEM_ID_AUTO_CAPITALISE;
-    elm_genlist_item_append(genlist, option_elements[type].itc_main_sub_text_radio, &main_itemdata[SETTING_ITEM_ID_AUTO_CAPITALISE],
+    elm_genlist_item_append(genlist, option_elements[type].itc_main_text_radio, &main_itemdata[SETTING_ITEM_ID_AUTO_CAPITALISE],
                         NULL, ELM_GENLIST_ITEM_NONE, _main_gl_sel, (void *)(main_itemdata[SETTING_ITEM_ID_AUTO_CAPITALISE].mode));
 
     /* Auto punctuate */
     strncpy(main_itemdata[SETTING_ITEM_ID_AUTO_PUNCTUATE].main_text, AUTO_PUNCTUATE, ITEM_DATA_STRING_LEN - 1);
     strncpy(main_itemdata[SETTING_ITEM_ID_AUTO_PUNCTUATE].sub_text, PUNCTUATE_DESC, ITEM_DATA_STRING_LEN - 1);
     main_itemdata[SETTING_ITEM_ID_AUTO_PUNCTUATE].mode = SETTING_ITEM_ID_AUTO_PUNCTUATE;
-    elm_genlist_item_append(genlist, option_elements[type].itc_main_sub_text_radio, &main_itemdata[SETTING_ITEM_ID_AUTO_PUNCTUATE],
+    elm_genlist_item_append(genlist, option_elements[type].itc_main_text_radio, &main_itemdata[SETTING_ITEM_ID_AUTO_PUNCTUATE],
                           NULL, ELM_GENLIST_ITEM_NONE, _main_gl_sel, (void *)(main_itemdata[SETTING_ITEM_ID_AUTO_PUNCTUATE].mode));
 
     /* Key-tap feedback */
@@ -812,7 +762,7 @@ Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe
     strncpy(main_itemdata[SETTING_ITEM_ID_CHARACTER_PRE].main_text, CHARACTER_PREVIEW, ITEM_DATA_STRING_LEN - 1);
     strncpy(main_itemdata[SETTING_ITEM_ID_CHARACTER_PRE].sub_text, PREVIEW_DESC, ITEM_DATA_STRING_LEN - 1);
     main_itemdata[SETTING_ITEM_ID_CHARACTER_PRE].mode = SETTING_ITEM_ID_CHARACTER_PRE;
-    elm_genlist_item_append(genlist, option_elements[type].itc_main_sub_text_radio, &main_itemdata[SETTING_ITEM_ID_CHARACTER_PRE],
+    elm_genlist_item_append(genlist, option_elements[type].itc_main_text_radio, &main_itemdata[SETTING_ITEM_ID_CHARACTER_PRE],
                             NULL, ELM_GENLIST_ITEM_NONE, _main_gl_sel, (void *)(main_itemdata[SETTING_ITEM_ID_CHARACTER_PRE].mode));
 
     /* More settings */
