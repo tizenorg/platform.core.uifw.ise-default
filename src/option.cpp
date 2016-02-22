@@ -593,39 +593,6 @@ static void create_genlist_item_classes(SCLOptionWindowType type)
     }
 }
 
-static std::string compose_selected_languages_string(void)
-{
-    const int NUM_DISPLAY_LANGUAGE = 2;
-
-    const int TEMP_STRING_LEN = 255;
-    char szTemp[TEMP_STRING_LEN];
-
-    std::string languages;
-    int num_languages = 0;
-
-    for (scluint loop = 0;loop < _language_manager.get_languages_num();loop++) {
-        LANGUAGE_INFO *info = _language_manager.get_language_info(loop);
-        if (info) {
-            if (info->enabled) {
-                num_languages++;
-                if (num_languages <= NUM_DISPLAY_LANGUAGE) {
-                    if (num_languages > 1) {
-                        languages += ", ";
-                    }
-                    languages += info->display_name;
-                }
-            }
-        }
-    }
-    if (num_languages > NUM_DISPLAY_LANGUAGE) {
-        snprintf(szTemp, TEMP_STRING_LEN, "%d (%s, ...)", num_languages, languages.c_str());
-    } else {
-        snprintf(szTemp, TEMP_STRING_LEN, "%d (%s)", num_languages, languages.c_str());
-    }
-
-    return std::string(szTemp);
-}
-
 static void language_selection_finished_cb(void *data, Evas_Object *obj, void *event_info)
 {
     if (_language_manager.get_enabled_languages_num() == 0) {
@@ -760,8 +727,6 @@ Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe
 
     if (_language_manager.get_languages_num() > 1) {
         strncpy(main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE].main_text, SELECT_LANGUAGES, ITEM_DATA_STRING_LEN - 1);
-        //std::string languages = compose_selected_languages_string();
-        //strncpy(main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE].sub_text, languages.c_str(), ITEM_DATA_STRING_LEN - 1);
         main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE].mode = SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE;
         option_elements[type].languages_item =
             elm_genlist_item_append(genlist, option_elements[type].itc_main_text_only, &main_itemdata[SETTING_ITEM_ID_SELECT_INPUT_LANGUAGE],
