@@ -19,6 +19,7 @@ BuildRequires:  pkgconfig(libscl-core)
 BuildRequires:  pkgconfig(ecore-imf)
 BuildRequires:  pkgconfig(libxml-2.0)
 BuildRequires:  pkgconfig(efl-extension)
+BuildRequires:  model-build-features
 
 
 
@@ -39,6 +40,10 @@ export FFLAGS+=" -DTIZEN_DEBUG_ENABLE"
 %if "%{profile}" == "wearable"
 CFLAGS+=" -D_WEARABLE";
 CXXFLAGS+=" -D_WEARABLE";
+%if "%{model_build_feature_formfactor}" == "circle"
+CFLAGS+=" -D_CIRCLE";
+CXXFLAGS+=" -D_CIRCLE";
+%endif
 %endif
 
 %if "%{profile}" == "mobile"
