@@ -32,11 +32,11 @@
 #ifdef _TV
 #define MAIN_ENTRY_XML_PATH "/usr/share/isf/ise/ise-default/720x1280/default/tv/main_entry.xml"
 #elif _WEARABLE
+#undef MAIN_ENTRY_XML_PATH
 #define MAIN_ENTRY_XML_PATH "/usr/share/isf/ise/ise-default/720x1280/default/wearable/main_entry.xml"
 #else
-#ifndef MAIN_ENTRY_XML_PATH
+#undef MAIN_ENTRY_XML_PATH
 #define MAIN_ENTRY_XML_PATH "/usr/share/isf/ise/ise-default/720x1280/default/sdk/main_entry.xml"
-#endif
 #endif
 
 #endif
