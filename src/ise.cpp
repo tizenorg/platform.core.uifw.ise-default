@@ -92,8 +92,8 @@ static scluint              _click_count = 0;
 static const char          *_sig_dec[SIG_DEC_SIZE] = {".", "-"};
 static scluint              _sig_dec_event[SIG_DEC_SIZE] = {'.', '-'};
 static Ecore_Timer         *_commit_timer = NULL;
+static Candidate           *g_candidate = NULL;
 
-Candidate *g_candidate = NULL;
 class CandidateEventListener: public EventListener
 {
     public:
@@ -452,10 +452,14 @@ void CCoreEventCallback::on_process_key_event(scim::KeyEvent &key, sclu32 *ret)
 void CCoreEventCallback::on_candidate_show(sclint ic, const sclchar *ic_uuid)
 {
     delete_softcandidate_hide_timer();
-    if (g_candidate) {
-        g_candidate->show();
-        g_softcandidate_show = true;
+
+    if (!g_candidate) {
+        g_candidate = CandidateFactory::make_candidate(CANDIDATE_MULTILINE, g_core.get_main_window());
+        g_candidate->add_event_listener(&g_candidate_event_listener);
     }
+
+    g_candidate->show();
+    g_softcandidate_show = true;
 }
 
 void CCoreEventCallback::on_candidate_hide(sclint ic, const sclchar *ic_uuid)
@@ -1107,6 +1111,7 @@ ise_set_screen_rotation(int degree)
     if (g_ui) {
         g_ui->set_rotation(DEGREE_TO_SCLROTATION(degree));
     }
+
     if (g_candidate) {
         g_candidate->rotate(degree);
         if (g_softcandidate_show) {
@@ -1161,7 +1166,6 @@ ise_create()
         scl_parser_type = SCL_PARSER_TYPE_XML;
     }
 
-
     if (g_ui) {
         if (g_core.get_main_window()) {
             sclboolean succeeded = FALSE;
@@ -1197,11 +1201,7 @@ ise_create()
             }
 
             g_core.enable_soft_candidate(true);
-            // FIXME whether to use global var, need to check
-            if (g_candidate == NULL) {
-                g_candidate = CandidateFactory::make_candidate(CANDIDATE_MULTILINE, g_core.get_main_window());
-            }
-            g_candidate->add_event_listener(&g_candidate_event_listener);
+
             g_ui->set_longkey_duration(elm_config_longpress_timeout_get() * 1000);
 
             /* Default ISE callback */
@@ -1246,6 +1246,7 @@ ise_destroy()
         delete g_ui;
         g_ui = NULL;
     }
+
     if (g_candidate) {
         delete g_candidate;
         g_candidate = NULL;
