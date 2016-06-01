@@ -230,6 +230,20 @@ static char *_main_gl_text_get(void *data, Evas_Object *obj, const char *part)
     return NULL;
 }
 
+#ifdef _WEARABLE
+static char *_title_text_get(void *data, Evas_Object *obj, const char *part)
+{
+    const char *title = (const char *)data;
+    if (!title) return NULL;
+
+    if (!strcmp(part, "elm.text")) {
+        return strdup(title);
+    }
+
+    return NULL;
+}
+#endif
+
 static Eina_Bool _update_check_button_state(Elm_Object_Item *item, Evas_Object *obj)
 {
     Eina_Bool state = EINA_FALSE;
@@ -653,6 +667,17 @@ static void _naviframe_back_cb(void *data, Evas_Object *obj, void *event_info)
     }
 }
 
+#ifdef _WEARABLE
+static void add_scrollable_title_area(Evas_Object *genlist, const char *title)
+{
+    Elm_Genlist_Item_Class *ttc = elm_genlist_item_class_new();
+    ttc->item_style = "title";
+    ttc->func.text_get = _title_text_get;
+    elm_genlist_item_append(genlist, ttc, title, NULL, ELM_GENLIST_ITEM_NONE, NULL, NULL);
+    elm_genlist_item_class_free(ttc);
+}
+#endif
+
 Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe, SCLOptionWindowType type)
 {
     Evas_Object *genlist = NULL;
@@ -676,6 +701,11 @@ Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe
         evas_object_size_hint_weight_set(genlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
         evas_object_size_hint_align_set(genlist, EVAS_HINT_FILL, EVAS_HINT_FILL);
         elm_genlist_tree_effect_enabled_set(genlist, EINA_FALSE);
+
+#ifdef _WEARABLE
+        /* Add scrollable title area in wearable profile */
+        add_scrollable_title_area(genlist, OPTIONS);
+#endif
 
         /* Input languages */
         strncpy(main_itemdata[SETTING_ITEM_ID_INPUT_LANGUAGE_TITLE].main_text, LANGUAGE, ITEM_DATA_STRING_LEN - 1);
@@ -795,6 +825,11 @@ static Evas_Object* create_option_language_view(Evas_Object *naviframe)
         Eext_Circle_Surface *circle_surface = eext_circle_surface_conformant_add(option_elements[type].conformant);
         Evas_Object *circle_genlist = eext_circle_object_genlist_add(genlist, circle_surface);
         eext_rotary_object_event_activated_set(circle_genlist, EINA_TRUE);
+#endif
+
+#ifdef _WEARABLE
+        /* Add scrollable title area in wearable profile */
+        add_scrollable_title_area(genlist, LANGUAGE);
 #endif
 
         for (unsigned int loop = 0; loop < OPTION_MAX_LANGUAGES && loop < _language_manager.get_languages_num(); loop++)
