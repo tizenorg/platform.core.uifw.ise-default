@@ -230,6 +230,17 @@ static char *_main_gl_text_get(void *data, Evas_Object *obj, const char *part)
     return NULL;
 }
 
+#ifdef _WEARABLE
+static char *_title_text_get(void *data, Evas_Object *obj, const char *part)
+{
+    if (!strcmp(part, "elm.text")) {
+        return strdup(OPTIONS);
+    }
+
+    return NULL;
+}
+#endif
+
 static Eina_Bool _update_check_button_state(Elm_Object_Item *item, Evas_Object *obj)
 {
     Eina_Bool state = EINA_FALSE;
@@ -676,6 +687,15 @@ Evas_Object* create_option_main_view(Evas_Object *parent, Evas_Object *naviframe
         evas_object_size_hint_weight_set(genlist, EVAS_HINT_EXPAND, EVAS_HINT_EXPAND);
         evas_object_size_hint_align_set(genlist, EVAS_HINT_FILL, EVAS_HINT_FILL);
         elm_genlist_tree_effect_enabled_set(genlist, EINA_FALSE);
+
+#ifdef _WEARABLE
+        /* Add scrollable title area in wearable profile */
+        Elm_Genlist_Item_Class *ttc = elm_genlist_item_class_new();
+        ttc->item_style = "title";
+        ttc->func.text_get = _title_text_get;
+        elm_genlist_item_append(genlist, ttc, NULL, NULL, ELM_GENLIST_ITEM_NONE, NULL, NULL);
+        elm_genlist_item_class_free(ttc);
+#endif
 
         /* Input languages */
         strncpy(main_itemdata[SETTING_ITEM_ID_INPUT_LANGUAGE_TITLE].main_text, LANGUAGE, ITEM_DATA_STRING_LEN - 1);
