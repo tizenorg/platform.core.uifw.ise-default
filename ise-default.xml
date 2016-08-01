@@ -4,7 +4,7 @@
 <description/>
 <label>Tizen keyboard</label>
 <icon/>
-<ui-application appid="ise-default" exec="/usr/lib/scim-1.0/scim-helper-launcher" nodisplay="true" taskmanage="false" multiple="false" type="capp" hw-acceleration="use-system-setting" mainapp="true">
+<ui-application appid="ise-default" exec="ise-default" nodisplay="true" taskmanage="false" multiple="false" type="capp" hw-acceleration="use-system-setting" mainapp="true">
     <category name="http://tizen.org/category/ime"/>
     <label>Tizen keyboard</label>
     <label xml:lang="ar-ae">لوحة مفاتيح Tizen</label>
@@ -91,5 +91,6 @@
 </ui-application>
 <privileges>
     <privilege>http://tizen.org/privilege/ime</privilege>
+    <privilege>http://tizen.org/privilege/haptic</privilege>
 </privileges>
 </manifest>
