@@ -772,7 +772,6 @@ on_input_mode_changed(const sclchar *key_value, sclulong key_event, sclint key_t
     return ret;
 }
 
-
 SCLEventReturnType CUIEventCallback::on_event_notification(SCLUINotiType noti_type, SclNotiDesc *etc_info)
 {
     SCLEventReturnType ret = SCL_EVENT_PASS_ON;
@@ -1646,4 +1645,11 @@ static void update_recent_used_punctuation(const char * key_value)
     {
         g_recent_used_punctuation.erase(g_recent_used_punctuation.begin());
     }
+}
+
+int main (int argc, char *argv[])
+{
+    g_core.run();
+
+    return 0;
 }
