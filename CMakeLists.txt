@@ -17,6 +17,7 @@ SET(ISE_SRCS
 
     src/ise-emoticon-list.cpp
     src/ise-emoticon-mode.cpp
+    src/cbhm.cpp
 )
 
 SET(ISE_PACKAGE ${PROJECT_NAME})

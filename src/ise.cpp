@@ -33,6 +33,8 @@
 #include "languages.h"
 #include "candidate-factory.h"
 #include "ise-emoticon-mode.h"
+#include "cbhm.h"
+
 #define CANDIDATE_WINDOW_HEIGHT 84
 using namespace scl;
 #include <vector>
@@ -131,12 +133,13 @@ static ISELanguageManager _language_manager;
 #define MVK_Shift_Enable 0x9fe7
 #define MVK_Shift_Disable 0x9fe8
 
-#define CM_KEY_LIST_SIZE        2
-#define USER_KEYSTRING_OPTION   "OPTION"
-#define USER_KEYSTRING_EMOTICON "EMOTICON_LAYOUT"
+#define CM_KEY_LIST_SIZE         3
+#define USER_KEYSTRING_OPTION    "OPTION"
+#define USER_KEYSTRING_EMOTICON  "EMOTICON_LAYOUT"
+#define USER_KEYSTRING_CLIPBOARD "CLIPBOARD"
 
 static sclboolean           _cm_popup_opened = FALSE;
-static const char          *_cm_key_list[CM_KEY_LIST_SIZE] = {USER_KEYSTRING_OPTION, USER_KEYSTRING_EMOTICON};
+static const char          *_cm_key_list[CM_KEY_LIST_SIZE] = {USER_KEYSTRING_OPTION, USER_KEYSTRING_EMOTICON, USER_KEYSTRING_CLIPBOARD};
 static scluint              _current_cm_key_id = 0;
 
 /*
@@ -207,6 +210,12 @@ static void ise_set_cm_private_key(scluint cm_key_id)
             const_cast<sclchar*>("setting icon/B09_icon_setting_press_54x54.png"),
             const_cast<sclchar*>("setting icon/B09_icon_setting_dim_54x54.png")};
         g_ui->set_private_key("CM_KEY", const_cast<sclchar*>(""), imagelabel, NULL, 0, const_cast<sclchar*>(USER_KEYSTRING_OPTION), TRUE);
+    } else if (strcmp(_cm_key_list[cm_key_id], USER_KEYSTRING_CLIPBOARD) == 0) {
+        sclchar* imagelabel[SCL_BUTTON_STATE_MAX] = {
+            const_cast<sclchar*>("icon_clipboard.png"),
+            const_cast<sclchar*>("icon_clipboard.png"),
+            const_cast<sclchar*>("icon_clipboard.png")};
+        g_ui->set_private_key("CM_KEY", const_cast<sclchar*>(""), imagelabel, NULL, 0, const_cast<sclchar*>(USER_KEYSTRING_CLIPBOARD), TRUE);
     }
 }
 
@@ -273,6 +282,7 @@ void CCoreEventCallback::on_init()
 {
     LOGD("CCoreEventCallback::init()\n");
     ise_create();
+    cbhm_eldbus_init();
 }
 
 void CCoreEventCallback::on_run(int argc, char **argv)
@@ -285,6 +295,7 @@ void CCoreEventCallback::on_exit()
 {
     ::ise_hide();
     ise_destroy();
+    cbhm_eldbus_deinit();
 }
 
 void CCoreEventCallback::on_attach_input_context(sclint ic, const sclchar *ic_uuid)
@@ -952,6 +963,9 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
                 if (!option_window_is_available (OPTION_WINDOW_TYPE_NORMAL))
                     g_core.create_option_window();
                 ret = SCL_EVENT_DONE;
+            } else if (strcmp(event_desc.key_value, USER_KEYSTRING_CLIPBOARD) == 0) {
+                eldbus_proxy_call(cbhm_proxy_get(), "CbhmShow", NULL, NULL, -1, "s", "0");
+                ret = SCL_EVENT_DONE;
             } else if (on_input_mode_changed(event_desc.key_value, event_desc.key_event, event_desc.key_type)) {
                 ret = SCL_EVENT_DONE;
             }
@@ -971,6 +985,9 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
                 //open_option_window(NULL, ROTATION_TO_DEGREE(g_ui->get_rotation()));
                 if (!option_window_is_available (OPTION_WINDOW_TYPE_NORMAL))
                     g_core.create_option_window();
+                ret = SCL_EVENT_DONE;
+            } else if (strcmp(event_desc.key_value, USER_KEYSTRING_CLIPBOARD) == 0) {
+                eldbus_proxy_call(cbhm_proxy_get(), "CbhmShow", NULL, NULL, -1, "s", "0");
                 ret = SCL_EVENT_DONE;
             } else {
                 const sclchar *input_mode = g_ui->get_input_mode();
@@ -1004,6 +1021,12 @@ SCLEventReturnType CUIEventCallback::on_event_key_clicked(SclUIEventDesc event_d
             if (_cm_popup_opened) {
                 if (strcmp(event_desc.key_value, USER_KEYSTRING_OPTION) == 0) {
                     scluint id = ise_get_cm_key_id(USER_KEYSTRING_OPTION);
+                    if (id != _current_cm_key_id) {
+                        _current_cm_key_id = id;
+                        ise_set_cm_private_key(_current_cm_key_id);
+                    }
+                } else if (strcmp(event_desc.key_value, USER_KEYSTRING_CLIPBOARD) == 0) {
+                    scluint id = ise_get_cm_key_id(USER_KEYSTRING_CLIPBOARD);
                     if (id != _current_cm_key_id) {
                         _current_cm_key_id = id;
                         ise_set_cm_private_key(_current_cm_key_id);

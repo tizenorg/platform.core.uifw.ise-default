@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<layout width="160" height="124" style="popup" key_width="75" key_height="116" key_spacing="2" row_spacing="2" hit_left="1" hit_right="1" hit_top="4" hit_bottom="4" label_type="PUNC_POPUP" vibe_style="DEFAULT" sound_style="DEFAULT">
+<layout width="237" height="124" style="popup" key_width="75" key_height="116" key_spacing="2" row_spacing="2" hit_left="1" hit_right="1" hit_top="4" hit_bottom="4" label_type="PUNC_POPUP" vibe_style="DEFAULT" sound_style="DEFAULT">
   <image_path>
     <button_normal>B09_popup_bg.png</button_normal>
   </image_path>
@@ -20,13 +20,27 @@
         <rec button="normal">popup_line/popup_line_left.png</rec>
       </background_image>
     </key>
-    <key key_type="modechange" custom_id="EMOTICON_KEY" hit_right="4">
+    <key key_type="modechange" custom_id="EMOTICON_KEY">
       <key_value>
         <rec>EMOTICON_LAYOUT</rec>
       </key_value>
       <image_label>
         <rec button="normal">emoticon/icon_emotion_nor_55x55.png</rec>
         <rec button="pressed">emoticon/icon_emotion_press_55x55.png</rec>
+        <rec button="disabled"></rec>
+      </image_label>
+      <background_image>
+        <rec button="normal">popup_line/popup_line_center.png</rec>
+        <rec button="disabled">popup_line/popup_line_center.png</rec>
+      </background_image>
+    </key>
+    <key key_type="user" hit_right="4">
+      <key_value>
+        <rec>CLIPBOARD</rec>
+      </key_value>
+      <image_label>
+        <rec button="normal">icon_clipboard.png</rec>
+        <rec button="pressed">icon_clipboard.png</rec>
         <rec button="disabled"></rec>
       </image_label>
       <background_image>
