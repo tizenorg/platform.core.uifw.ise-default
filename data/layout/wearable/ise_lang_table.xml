@@ -52,11 +52,13 @@
   <rec language="Urdu" language_name="اردو" inputmode_QTY="URDU_4X4" inputmode_QTY_name="Urdu" keyboard_ise_uuid="uuid_default" country_code_URL="in"/>
   <rec language="Hebrew" language_name="עברית" inputmode_QTY="HEBREW_4X4" inputmode_QTY_name="Hebrew" keyboard_ise_uuid="uuid_default" country_code_URL="il"/>
   -->
+  <!--
   <rec language="Korean" language_name="한글" inputmode_QTY="KOREAN_4X4" inputmode_QTY_name="쿼티" keyboard_ise_uuid="uuid_korean" country_code_URL="kr" locale_string="ko_KR"/>
   <rec language="Chinese" language_name="中文" inputmode_QTY="CHINESE_4X4" inputmode_QTY_name="Qwerty键盘" keyboard_ise_uuid="uuid_sunpinyin" country_code_URL="cn" locale_string="zh_CN"/>
   <rec language="Taiwan" language_name="註音" inputmode_QTY="ZHUYIN_4X4" inputmode_QTY_name="註音" main_keyboard_name="中" keyboard_ise_uuid="uuid_zhuyin_big" country_code_URL="tw" locale_string="zh_TW"/>
   <rec language="Hongkong" language_name="倉頡" inputmode_QTY="CANGJIE_4X4" inputmode_QTY_name="倉頡" main_keyboard_name="中" keyboard_ise_uuid="uuid_cangjie_3" country_code_URL="hk" locale_string="zh_HK"/>
   <rec language="Japanese" language_name="日本語" inputmode_QTY="JAPANESE_4X4" inputmode_QTY_name="Qwerty" main_keyboard_name="あ" keyboard_ise_uuid="uuid_anthy" country_code_URL="jp" locale_string="ja_JP"/>
+  -->
   <!--
   <rec language="Vietnamese" language_name="Tiếng Việt" inputmode_QTY="VIETNAMESE_4X4" inputmode_QTY_name="3x4 keyboard" keyboard_ise_uuid="uuid_unikey" country_code_URL="vn" is_latin_language="true" accepts_caps_mode="true" locale_string="vi_VN"/>
   -->
@@ -90,10 +92,11 @@
   <!--
   <rec language="Sinhala" language_name="﻿සිංහල" inputmode_QTY="SINHALA_4X4" inputmode_QTY_name="Sinhala" main_keyboard_name="සිංහල" keyboard_ise_uuid="uuid_default" country_code_URL="lk"/>
   -->
-
- <rec language="Hindi" language_name="हिन्दी" inputmode_QTY="HINDI_4X4" inputmode_QTY_name="Hindi" keyboard_ise_uuid="uuid_default" country_code_URL="in" is_latin_language="true" accepts_caps_mode="true" locale_string="hi"/>
- <rec language="Irish" language_name="Irish" inputmode_QTY="IRISH_4X4" inputmode_QTY_name="3x4 keyboard" keyboard_ise_uuid="uuid_default" country_code_URL="ga" is_latin_language="true" accepts_caps_mode="true" locale_string="ga_IE"/>
- <rec language="Uzbek" language_name="Uzbek" inputmode_QTY="UZBEK_4X4" inputmode_QTY_name="3x4 keyboard" keyboard_ise_uuid="uuid_default" country_code_URL="uz" is_latin_language="true" accepts_caps_mode="true" locale_string="uz_UZ"/>
+  <!--
+  <rec language="Hindi" language_name="हिन्दी" inputmode_QTY="HINDI_4X4" inputmode_QTY_name="Hindi" keyboard_ise_uuid="uuid_default" country_code_URL="in" is_latin_language="true" accepts_caps_mode="true" locale_string="hi"/>
+  -->
+  <rec language="Irish" language_name="Irish" inputmode_QTY="IRISH_4X4" inputmode_QTY_name="3x4 keyboard" keyboard_ise_uuid="uuid_default" country_code_URL="ga" is_latin_language="true" accepts_caps_mode="true" locale_string="ga_IE"/>
+  <rec language="Uzbek" language_name="Uzbek" inputmode_QTY="UZBEK_4X4" inputmode_QTY_name="3x4 keyboard" keyboard_ise_uuid="uuid_default" country_code_URL="uz" is_latin_language="true" accepts_caps_mode="true" locale_string="uz_UZ"/>
 
 </language_table>
 </languages>
