@@ -1,5 +1,5 @@
-#define COLOR_NORMAL_TEXT       249 249 249 255
-#define COLOR_PRESS_TEXT        0 0 0 255
+#define COLOR_NORMAL_TEXT       250 250 250 255
+#define COLOR_PRESS_TEXT        18 36 56 255
 //#define FONT_NAME               "Tizen:style=Regular"
 #define FONT_NAME   "DejaVu"
 #define FONT_SIZE               38
@@ -19,13 +19,13 @@
 color_classes {
     color_class {
        name: "text_color";
-       color: 249 249 249 255;
+       color: COLOR_NORMAL_TEXT;
        color2: COLOR_NORMAL_TEXT;
        color3: COLOR_NORMAL_TEXT;
     }
     color_class {
        name: "rect_color";
-       color: 0 0 0 255;
+       color: 18 18 18 255;
     }
 }
 
@@ -141,7 +141,7 @@ collections {
                 }
                 description { state: "pressed" 0.0;
                     inherit: "default" 0.0;
-                    color: 0 0 0 255;
+                    color: COLOR_PRESS_TEXT;
                 }
             }
         }
